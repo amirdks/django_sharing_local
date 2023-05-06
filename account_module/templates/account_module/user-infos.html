@@ -1,0 +1,8 @@
+<div class="user-container">
+    {% if request.user.is_authenticated %}
+        {{ request.user.email }}
+    {% else %}
+        <a href="{% url 'login_view' %}">ورود</a>
+        <a href="{% url 'register_view' %}">ثبت نام</a>
+    {% endif %}
+</div>

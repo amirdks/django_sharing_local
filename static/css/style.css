@@ -1,0 +1,73 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    direction: rtl;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+}
+.user-container{
+    background-color: aqua;
+    color: black;
+    text-align: center;
+    padding: 20px 0;
+}
+.container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.events-container {
+    background-color: red;
+    width: 25%;
+    text-align: center;
+}
+
+.news-container {
+    background-color: green;
+    width: 50%;
+    text-align: center;
+}
+
+.files-container {
+    background-color: purple;
+    width: 25%;
+    text-align: center;
+}
+
+.event {
+    padding: 15px 0;
+    font-size: 1.3em;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+
+.news {
+    padding: 15px 0;
+    font-size: 1.3em;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+
+.file {
+    padding: 15px 0;
+    font-size: 1.3em;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+.event-list-container{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+li a{
+    color: black;
+}

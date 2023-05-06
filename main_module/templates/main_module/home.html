@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+<body>
+{% include 'account_module/user-infos.html' %}
+<div class="container">
+    <div class="events-container">
+        {% for event in events %}
+            <div class="event">
+                {{ event.title }}
+            </div>
+        {% endfor %}
+        <div class="event">
+            <a href="#">مشاهده همه</a>
+        </div>
+    </div>
+    <div class="news-container">
+        {% for new in news %}
+            <div class="news">
+                {{ new.title }}
+            </div>
+        {% endfor %}
+        <div class="news">
+            <a href="#">مشاهده همه</a>
+        </div>
+    </div>
+    <div class="files-container">
+        {% for file in files %}
+            <div class="file">
+                <a href="{{ file.file.url }}" download>{{ file.title }}</a>
+            </div>
+        {% endfor %}
+        <div class="file">
+            <a href="#">مشاهده همه</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

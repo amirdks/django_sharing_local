@@ -1,0 +1,12 @@
+{% extends 'shared/__layout.html' %}
+{% block content %}
+    <div class="event-list-container">
+        <ul>
+            {% for new in news %}
+                <li class="event-item">
+                    <a href="{% url 'news_detail_view' new.pk %}">{{ new.title }} ==> {{ new.created_at|date }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'shared/__layout.html' %}
+{% block content %}
+    <div class="event-list-container">
+        <ul>
+            {% for poll in polls %}
+                <li class="event-item">
+                    <a href="#">{{ poll.question }} ==> {{ poll.all_count }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

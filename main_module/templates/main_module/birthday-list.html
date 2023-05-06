@@ -1,0 +1,14 @@
+{% extends 'shared/__layout.html' %}
+
+{% block content %}
+    <div class="event-list-container">
+        <ul>
+            {% for birthday in birthdays %}
+                <li class="event-item">
+                    <a href="{% url 'birthday_detail_view' birthday.pk %}">{{ birthday.title }}
+                        ==> {{ birthday.birthday_date }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'shared/__layout.html' %}
+{% block content %}
+    <div class="event-list-container">
+        <ul>
+            {% for file in files %}
+                <li class="event-item">
+                    <a href="{{ file.file.url }}" download>{{ file.title }} ==> {{ file.created_at }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
