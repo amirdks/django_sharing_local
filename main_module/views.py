@@ -2,9 +2,12 @@ import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
+from account_module.models import UserLoggedIn, UserLoggedOut
+from main_module.forms import FileAddForm, EventAddForm
 from main_module.models import File, Event, Birthday
 from news_module.models import News
 
@@ -66,3 +69,27 @@ class BirthdayDetailView(LoginRequiredMixin, DetailView):
 
 class TestView(TemplateView):
     template_name = 'shared/__layout.html'
+
+
+class FileAddView(CreateView):
+    form_class = FileAddForm
+    model = File
+    template_name = 'main_module/add-file.html'
+    success_url = reverse_lazy('file_list_view')
+
+
+
+class LoginReportView(View):
+    def get(self, request):
+        context = {
+            "logins": UserLoggedIn.objects.all()
+        }
+        return render(request, 'main_module/login-report.html', context)
+
+
+class LogoutReportView(View):
+    def get(self, request):
+        context = {
+            "logouts": UserLoggedOut.objects.all()
+        }
+        return render(request, 'main_module/logout-report.html', context)

@@ -9,5 +9,7 @@ urlpatterns = [
     path("birthdays/", views.BirthdayListView.as_view(), name="birthday_list_view"),
     path("birthdays/<int:pk>/", views.BirthdayDetailView.as_view(), name="birthday_detail_view"),
     path("files/", views.FileListView.as_view(), name="file_list_view"),
-    path("files/", views.FileListView.as_view(), name="file_list_view"),
+    path("files/add/", views.FileAddView.as_view(), name="file_add_view"),
+    path("login-report", views.LoginReportView.as_view(), name="login_report_view"),
+    path("logout-report", views.LogoutReportView.as_view(), name="logout_report_view"),
 ]

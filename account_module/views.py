@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views import View
 
 from account_module.forms import LoginForm, RegisterForm
-from account_module.models import User
+from account_module.models import *
 
 
 # Create your views here.
@@ -34,6 +34,7 @@ class LoginView(View):
                 is_password_correct = user.check_password(password)
                 if is_password_correct:
                     login(request, user)
+                    UserLoggedIn.objects.create(user_id=user.id)
                     return redirect(reverse("home_view"))
                 else:
                     login_form.add_error(field='password', error='کلمه عبور اشتباه است')
@@ -74,5 +75,6 @@ class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect(reverse('home_view'))
+        UserLoggedOut.objects.create(user_id=request.user.id)
         logout(request)
         return redirect(reverse('login_view'))

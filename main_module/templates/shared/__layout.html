@@ -8,7 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css"
+          integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
     {% block custom_header %}{% endblock %}
     {#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
 </head>
@@ -41,6 +44,17 @@
                     <li><i class="fa-solid fa-newspaper"></i> <a href="{% url 'news_list_view' %}">اخبار</a></li>
                 </ul>
             </div>
+            <div class="sidebar-items-container">
+                <div class="sidebar-items-title">
+                    گزارشات ورود و خروج
+                </div>
+                <ul>
+                    <li><i class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'login_report_view' %}">گزارشات
+                        ورود کارکنان</a></li>
+                    <li><i class="fa-solid fa-newspaper"></i> <a href="{% url 'logout_report_view' %}">گزارشات خروج
+                        کارکنان</a></li>
+                </ul>
+            </div>
         </div>
 
     </div>
@@ -49,11 +63,12 @@
             <div class="navbar-container">
                 <div class="user-profile-avatar-container">
                     <img class="user-profile-avatar"
-                     src="{% static 'images/jurica-koletic-7YVZYZeITc8-unsplash.jpg' %}"
-                     alt=""><span class="user-profile-email">{{ request.user.full_name }}</span>
+                         src="{% static 'images/jurica-koletic-7YVZYZeITc8-unsplash.jpg' %}"
+                         alt=""><span class="user-profile-email">{{ request.user.full_name }}</span>
                 </div>
                 <span class="user-profile-email">{{ request.user.email }}</span>
-                <a class="user-profile-logout" href="{% url 'logout_view' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
+                <a class="user-profile-logout" href="{% url 'logout_view' %}"><i
+                        class="fa-solid fa-right-from-bracket"></i></a>
             </div>
             {% block content %}
 

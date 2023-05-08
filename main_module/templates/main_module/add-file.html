@@ -1,0 +1,21 @@
+{% extends 'shared/__layout.html' %}
+
+{% block content %}
+    <div class="article-container">
+        <div class="article-title">
+            <h1>افزودن فایل جدید</h1>
+        </div>
+        <form class="file-add-form" method="post" action="{% url 'file_add_view' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="file-add-input-group">
+                <label for="">عنوان فایل :</label>
+                {{ form.title }}
+            </div>
+            <div class="file-add-input-group">
+                <label for=""> فایل : </label>
+                {{ form.file }}
+            </div>
+            <button type="submit">تایید</button>
+        </form>
+    </div>
+{% endblock %}

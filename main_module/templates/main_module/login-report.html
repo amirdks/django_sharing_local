@@ -1,0 +1,31 @@
+{% extends 'shared/__layout.html' %}
+{% load jalali_tags %}
+{% block content %}
+    <div class="article-container">
+        <div class="article-title">
+            <h1>گزارشات ورود کارکنان</h1>
+        </div>
+        <table class="table report-table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">نام و نام خانوادگی</th>
+                <th scope="col">ایمیل</th>
+                <th scope="col">تاریخ ورود</th>
+                <th scope="col">ساعت ورود</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for login in logins %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ login.user.full_name }}</td>
+                    <td>{{ login.user.email }}</td>
+                    <td>{{ login.created_at.date | to_jalali }}</td>
+                 <td>{{ login.created_at | time }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
