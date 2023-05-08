@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css"
-          integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css"
+              integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     {% block custom_header %}{% endblock %}
@@ -27,10 +27,13 @@
                     منو اصلی
                 </div>
                 <ul>
-                    <li><i class="fa-regular fa-calendar"></i> <a href="{% url 'event_list_view' %}">رویداد ها</a></li>
-                    <li><i class="fa-solid fa-cake-candles"></i> <a href="{% url 'birthday_list_view' %}">تولد ها</a>
+                    <li class="{% if request.resolver_match.url_name == 'event_list_view' %}active-item{% endif %}"><i
+                            class="fa-regular fa-calendar"></i> <a href="{% url 'event_list_view' %}">رویداد ها</a></li>
+                    <li class="{% if request.resolver_match.url_name == 'birthday_list_view' %}active-item{% endif %}">
+                        <i class="fa-solid fa-cake-candles"></i> <a href="{% url 'birthday_list_view' %}">تولد ها</a>
                     </li>
-                    <li><i class="fa-solid fa-file"></i> <a href="{% url 'file_list_view' %}">فایل های اشتراک گذاری
+                    <li class="{% if request.resolver_match.url_name == 'file_list_view' %}active-item{% endif %}"><i
+                            class="fa-solid fa-file"></i> <a href="{% url 'file_list_view' %}">فایل های اشتراک گذاری
                         شده</a></li>
                 </ul>
             </div>
@@ -39,9 +42,11 @@
                     نظر سنجی ها و اخبار
                 </div>
                 <ul>
-                    <li><i class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'poll_list_view' %}">نظرسنجی
+                    <li class="{% if request.resolver_match.url_name == 'poll_list_view' %}active-item{% endif %}"><i
+                            class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'poll_list_view' %}">نظرسنجی
                         ها</a></li>
-                    <li><i class="fa-solid fa-newspaper"></i> <a href="{% url 'news_list_view' %}">اخبار</a></li>
+                    <li class="{% if request.resolver_match.url_name == 'news_list_view' %}active-item{% endif %}"><i
+                            class="fa-solid fa-newspaper"></i> <a href="{% url 'news_list_view' %}">اخبار</a></li>
                 </ul>
             </div>
             <div class="sidebar-items-container">
@@ -49,9 +54,11 @@
                     گزارشات ورود و خروج
                 </div>
                 <ul>
-                    <li><i class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'login_report_view' %}">گزارشات
+                    <li class="{% if request.resolver_match.url_name == 'login_report_view' %}active-item{% endif %}"><i
+                            class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'login_report_view' %}">گزارشات
                         ورود کارکنان</a></li>
-                    <li><i class="fa-solid fa-newspaper"></i> <a href="{% url 'logout_report_view' %}">گزارشات خروج
+                    <li class="{% if request.resolver_match.url_name == 'logout_report_view' %}active-item{% endif %}">
+                        <i class="fa-solid fa-newspaper"></i> <a href="{% url 'logout_report_view' %}">گزارشات خروج
                         کارکنان</a></li>
                 </ul>
             </div>
@@ -76,6 +83,24 @@
         </div>
     </article>
 </div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function showNotification(res, status) {
+        Swal.fire({
+            // `${status}`,
+            // `${res.message}`,
+            // `${res.status}`,
+            title: status,
+            text: res.message,
+            icon: res.status,
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'باشه'
+        }).then(()=>{
+            location.reload()
+        })
+    }
+</script>
 {% block custom_script %}{% endblock %}
 </body>
 </html>

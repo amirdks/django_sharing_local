@@ -7,7 +7,7 @@
 {% block content %}
     <div class="article-container">
         <div class="article-title">
-            <a class="add-newfile-btn">افزودن رویداد جدید</a>
+            <a href="{% url 'event_add_view' %}" class="add-newfile-btn">افزودن رویداد جدید</a>
             <h1>رویداد ها</h1>
             <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
         </div>

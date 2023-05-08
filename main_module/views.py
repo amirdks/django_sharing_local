@@ -1,8 +1,8 @@
 import datetime
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
@@ -78,7 +78,6 @@ class FileAddView(CreateView):
     success_url = reverse_lazy('file_list_view')
 
 
-
 class LoginReportView(View):
     def get(self, request):
         context = {
@@ -93,3 +92,30 @@ class LogoutReportView(View):
             "logouts": UserLoggedOut.objects.all()
         }
         return render(request, 'main_module/logout-report.html', context)
+
+
+class EventAddView(View):
+    def get(self, request):
+        form = EventAddForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'main_module/add-event.html', context)
+
+    def post(self, request):
+        print(request.POST)
+        end_time = request.POST.get('event_date')
+        print(end_time)
+        # now_time_str = datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        # now_time = datetime.datetime.strptime(now_time_str, "%m/%d/%Y %H:%M:%S")
+        # end_time_str = end_time.strftime("%m/%d/%Y %H:%M:%S")
+        end_time = end_time.strptime(end_time, "%m/%d/%Y %H:%M:%S")
+        request.POST["event_date"] = end_time
+        form = EventAddForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            return redirect(reverse("event_list_view"))
+        context = {
+            'form': form
+        }
+        return render(request, 'main_module/add-event.html', context)

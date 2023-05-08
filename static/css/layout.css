@@ -180,3 +180,11 @@ body {
     cursor: pointer;
     text-decoration: none;
 }
+
+.active-item {
+    border-bottom: 3px solid #E9A63A !important;
+}
+
+.active-item > i {
+    color: #E9A63A !important;;
+}
