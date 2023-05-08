@@ -7,9 +7,11 @@
 
 {% block content %}
     <div class="article-container">
-         <a class="add-newfile-btn">افزودن تولد جدید</a>
+        <div class="article-title">
+            <a class="add-newfile-btn">افزودن تولد جدید</a>
             <h1>تولد ها</h1>
             <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+        </div>
         <div class="birthday-container">
             {% for birthday in birthdays %}
                 <div class="birthday">
