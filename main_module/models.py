@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 
 
@@ -27,3 +29,6 @@ class Birthday(models.Model):
 
     class Meta:
         ordering = ["birthday_date"]
+
+    def reaming_date(self):
+        return self.birthday_date - datetime.datetime.today().date()

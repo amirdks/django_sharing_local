@@ -58,6 +58,12 @@ class PollOptions(models.Model):
     def __str__(self):
         return self.option
 
+    def option_count_x(self):
+        count = 0
+        for vote in self.vote_set.all():
+            count += 1
+        return count
+
     def poll_percent(self):
         try:
             percent = round(self.vote_set.count() * 100 / self.poll.all_count)

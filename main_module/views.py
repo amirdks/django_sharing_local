@@ -12,13 +12,15 @@ from news_module.models import News
 # Create your views here.
 class HomeView(LoginRequiredMixin, View):
     def get(self, request):
-        files = File.objects.all()[:5]
-        news = News.objects.all()[:5]
-        events = Event.objects.all()[:5]
+        files = File.objects.all()[:8]
+        news = News.objects.all()[:8]
+        birthdays = Birthday.objects.all()[:8]
+        events = Event.objects.all()[:8]
         context = {
             "files": files,
             "news": news,
             "events": events,
+            "birthdays": birthdays,
         }
         return render(request, "main_module/home.html", context)
 

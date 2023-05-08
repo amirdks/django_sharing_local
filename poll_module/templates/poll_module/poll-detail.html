@@ -1,67 +1,85 @@
+{% extends 'shared/__layout.html' %}
+{% load static %}
 {% load jalali_tags %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<center>
-    <h1>{{ poll.question }}</h1>
-    <p>{{ poll.created_at|to_jalali }}</p>
-    <p>کل رای دهنده ها : {{ poll.all_count }}</p>
-    <p>سازنده نظرسنجی => {{ poll.owner.full_name }}</p>
-    <h2>گزینه های نظر سنجی : </h2>
-    <ul>
-        {% for option in poll.poll_option.all %}
-            <li><a option_id="{{ option.pk }}">{{ option.option }}</a> ==> {{ option.vote_set.count }} ==>
-                %{{ option.poll_percent }}</li>
-        {% endfor %}
-    </ul>
-    <form id="form" action="#">
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'poll_detail_view' pk=poll.id %}" id="form">
         {% csrf_token %}
     </form>
-</center>
-<script>
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
+    <div class="article-container">
+        <h1 class="article-title">
+            جزییات نظرسنجی
+        </h1>
+        <div class="poll-detail-container">
+            <div class="poll-detail-title">
+                {{ poll.question }}
+            </div>
+            <div style="border: none!important;" class="mew-infos-container">
+                <div class="new-author">نویسنده : {{ poll.owner.full_name }}</div>
+                <div class="new-author">تعداد رای های ثبت شده : {{ poll.all_count }}</div>
+                <div class="new-date">{{ poll.created_at.date | to_jalali }}</div>
+            </div>
+            <div class="poll-option-container">
+                {% for option in poll.poll_option.all %}
+                    <div class="poll-option">
+                        <div class="poll-option-number">
+                            {{ forloop.counter }}
+                        </div>
+                        <div class="poll-option-title">
+                            {{ option.option }}
+                        </div>
+                        <div class="poll-option-count">
+                            {{ option.option_count_x }}
+                        </div>
+                        <div class="poll-option-btn">
+                            <button onclick="vote({{ option.id }})" class="submit-vote-btn">رای دادن</button>
+                            <button class="delete-cote-btn">حذف رای</button>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
+            return cookieValue;
         }
-        return cookieValue;
-    }
 
-    let links = document.getElementsByTagName("a")
-    let csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+        let links = document.getElementsByClassName("submit-vote-btn")
+        console.log(links)
+        let csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
-
-    for (const link of links) {
-        link.addEventListener("click", (event) => {
-            event.preventDefault()
-            let optionId = event.target.getAttribute("option_id")
-            myForm = document.getElementById("form")
+        function vote(optionId) {
+            let myForm = document.getElementById("form")
             let form = new FormData(myForm)
             form.append("option_id", optionId);
-            fetch("", {
+            fetch(myForm.getAttribute("action"), {
                 method: "POST",
                 {#headers: {'Content-Type': 'application/json', "X-CSRF-Token": getCookie("csrftoken")},#}
                 body: form
             }).then(res => res.json()).then(res => {
                 console.log(res)
             })
-        })
-    }
-</script>
-</body>
-</html>
+        }
+
+    </script>
+{% endblock %}

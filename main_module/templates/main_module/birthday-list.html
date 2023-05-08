@@ -1,14 +1,32 @@
 {% extends 'shared/__layout.html' %}
+{% load static %}
+{% load jalali_tags %}
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div class="event-list-container">
-        <ul>
+    <div class="article-container">
+         <a class="add-newfile-btn">افزودن تولد جدید</a>
+            <h1>تولد ها</h1>
+            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+        <div class="birthday-container">
             {% for birthday in birthdays %}
-                <li class="event-item">
-                    <a href="{% url 'birthday_detail_view' birthday.pk %}">{{ birthday.title }}
-                        ==> {{ birthday.birthday_date }}</a>
-                </li>
+                <div class="birthday">
+                    <div class="birthday-icon">
+                        <i class="fa-solid fa-cake-candles"></i>
+                    </div>
+                    <div class="birthday-title">
+                        {{ birthday.text }}
+                    </div>
+                    <div class="birthday-user">
+                        {{ birthday.user.full_name }} <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="birthday-date">
+                        {{ birthday.birthday_date|to_jalali }}
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 {% endblock %}

@@ -1,17 +1,27 @@
+{% extends 'shared/__layout.html' %}
+{% load static %}
 {% load jalali_tags %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<h1 style="text-align: center">{{ news.title }}</h1>
-<p style="text-align: center">نوسنده => {{ news.author.full_name }}</p>
-<p style="text-align: center">{{ news.content }}</p>
-<p style="text-align: center">{{ news.created_at|to_jalali }}</p>
-</body>
-</html>
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="article-container">
+        <h1 class="article-title">
+            جزییات خبر
+        </h1>
+        <div class="new-page-container">
+            <div class="new-page-section">
+                <img src="{{ news.image.url }}" alt="" class="new-page-image">
+            </div>
+            <div class="mew-infos-container">
+                <div class="new-author">نویسنده : {{ news.author.full_name }}</div>
+                <div class="new-date">{{ news.created_at.date | to_jalali }}</div>
+            </div>
+            <div class="new-title">{{ news.title }}</div>
+            <div class="new-description">
+                {{ news.content }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

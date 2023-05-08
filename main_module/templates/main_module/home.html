@@ -1,47 +1,82 @@
+{% extends 'shared/__layout.html' %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
-</head>
-<body>
-{% include 'account_module/user-infos.html' %}
-<div class="container">
-    <div class="events-container">
-        {% for event in events %}
-            <div class="event">
-                {{ event.title }}
-            </div>
-        {% endfor %}
-        <div class="event">
-            <a href="#">مشاهده همه</a>
+{% load jalali_tags %}
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="article-container">
+        <h1 class="article-title">
+            آخرین خبرها
+        </h1>
+        <div class="birthday-container">
+            {% for new in news %}
+                <a href="{% url 'news_detail_view' new.pk %}"
+                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
+                    <div class="news-icon">
+                        <img src="{{ new.image.url }}" alt="">
+                    </div>
+                    <div class="birthday-title">
+                        {{ new.title }}
+                    </div>
+                    <div class="birthday-user news-user">
+                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="birthday-date">
+                        {{ new.created_at|to_jalali }}
+                    </div>
+                </a>
+            {% endfor %}
         </div>
+        <a href="{% url 'news_list_view' %}" class="show-more">
+            show more <i class="fa-solid fa-arrow-down"></i>
+        </a>
     </div>
-    <div class="news-container">
-        {% for new in news %}
-            <div class="news">
-                {{ new.title }}
-            </div>
-        {% endfor %}
-        <div class="news">
-            <a href="#">مشاهده همه</a>
+    <div class="article-container">
+        <h1 class="article-title">
+            رویداد ها
+        </h1>
+        <div class="events-container">
+            {% for event in events %}
+                <div class="event">
+                    <div class="event-title">
+                        {{ event.title }}
+                    </div>
+                    <div class="event-date">
+                        {{ event.event_date|to_jalali }}
+                    </div>
+                </div>
+            {% endfor %}
+
         </div>
+        <a href="{% url 'event_list_view' %}" class="show-more">
+            show more <i class="fa-solid fa-arrow-down"></i>
+        </a>
     </div>
-    <div class="files-container">
-        {% for file in files %}
-            <div class="file">
-                <a href="{{ file.file.url }}" download>{{ file.title }}</a>
-            </div>
-        {% endfor %}
-        <div class="file">
-            <a href="#">مشاهده همه</a>
+    <div class="article-container">
+        <h1 class="article-title">
+            تولد ها
+        </h1>
+        <div class="birthday-container">
+            {% for birthday in birthdays %}
+                <div class="birthday">
+                    <div class="birthday-icon">
+                        <i class="fa-solid fa-cake-candles"></i>
+                    </div>
+                    <div class="birthday-title">
+                        {{ birthday.text }}
+                    </div>
+                    <div class="birthday-user">
+                        {{ birthday.user.full_name }} <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="birthday-date">
+                        {{ birthday.birthday_date|to_jalali }}
+                    </div>
+                </div>
+            {% endfor %}
         </div>
+        <a href="{% url 'birthday_list_view' %}" class="show-more">
+            show more <i class="fa-solid fa-arrow-down"></i>
+        </a>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

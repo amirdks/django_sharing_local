@@ -20,10 +20,15 @@ class PollDetailView(LoginRequiredMixin, DetailView):
 
     def post(self, request: HttpRequest, pk):
         option_id = request.POST.get("option_id")
-        option = PollOptions.objects.filter(pk=option_id)
+        option = PollOptions.objects.filter(pk=option_id).first()
+        print(option)
         user = request.user
         old_vote: Vote = Vote.objects.filter(poll_id=self.get_object().id, user_id=user.id).first()
         if old_vote:
+            print("are boodesh")
+            option.option_count -= 1
             old_vote.delete()
+        option.option_count += 1
+        option.save()
         new_vote = Vote.objects.create(poll_id=self.get_object().id, poll_option_id=option_id, user_id=user.id)
         return JsonResponse({"status": "success"})

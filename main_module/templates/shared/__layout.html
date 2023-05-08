@@ -7,9 +7,10 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-        <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block custom_header %}{% endblock %}
+    {#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
 </head>
 <body>
 <div class="main-container">
@@ -24,7 +25,8 @@
                 </div>
                 <ul>
                     <li><i class="fa-regular fa-calendar"></i> <a href="{% url 'event_list_view' %}">رویداد ها</a></li>
-                    <li><i class="fa-solid fa-cake-candles"></i> <a href="{% url 'birthday_list_view' %}">تولد ها</a></li>
+                    <li><i class="fa-solid fa-cake-candles"></i> <a href="{% url 'birthday_list_view' %}">تولد ها</a>
+                    </li>
                     <li><i class="fa-solid fa-file"></i> <a href="{% url 'file_list_view' %}">فایل های اشتراک گذاری
                         شده</a></li>
                 </ul>
@@ -34,7 +36,8 @@
                     نظر سنجی ها و اخبار
                 </div>
                 <ul>
-                    <li><i class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'poll_list_view' %}">نظرسنجی ها</a></li>
+                    <li><i class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'poll_list_view' %}">نظرسنجی
+                        ها</a></li>
                     <li><i class="fa-solid fa-newspaper"></i> <a href="{% url 'news_list_view' %}">اخبار</a></li>
                 </ul>
             </div>
@@ -44,17 +47,20 @@
     <article class="content-container">
         <div class="content-section">
             <div class="navbar-container">
-                <img class="user-profile-avatar"
-                     src="{% static 'images/24-248253_user-profile-default-image-png-clipart-png-download.png' %}"
-                     alt="">
+                <div class="user-profile-avatar-container">
+                    <img class="user-profile-avatar"
+                     src="{% static 'images/jurica-koletic-7YVZYZeITc8-unsplash.jpg' %}"
+                     alt=""><span class="user-profile-email">{{ request.user.full_name }}</span>
+                </div>
                 <span class="user-profile-email">{{ request.user.email }}</span>
-                <span class="user-profile-email">{{ request.user.full_name }}</span>
+                <a class="user-profile-logout" href="{% url 'logout_view' %}"><i class="fa-solid fa-right-from-bracket"></i></a>
             </div>
-            <div class="article-container">
-                {% block content %}{% endblock %}
-            </div>
+            {% block content %}
+
+            {% endblock %}
         </div>
     </article>
 </div>
+{% block custom_script %}{% endblock %}
 </body>
 </html>

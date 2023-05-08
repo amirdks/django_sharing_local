@@ -1,13 +1,31 @@
 {% extends 'shared/__layout.html' %}
+{% load static %}
+{% load jalali_tags %}
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 {% block content %}
-    <div class="event-list-container">
-        <ul>
+    <div class="article-container">
+        <h1 class="article-title">
+             <a class="add-newfile-btn">افزودن رویداد جدید</a>
+            <h1>رویداد ها</h1>
+            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+        </h1>
+        <div class="events-container">
             {% for event in events %}
-                <li class="event-item">
-                    <a style="text-decoration: underline"
-                       href="{% url 'event_detail_view' event.pk %}">{{ event.title }} ==> {{ event.event_date }}</a>
-                </li>
+                <div class="event">
+                    <div class="birthday-icon">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <div class="event-title">
+                        {{ event.title }}
+                    </div>
+                    <div class="event-date">
+                        {{ event.event_date|to_jalali }}
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+
+        </div>
     </div>
 {% endblock %}

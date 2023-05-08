@@ -1,12 +1,34 @@
 {% extends 'shared/__layout.html' %}
+{% load static %}
+{% load jalali_tags %}
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
-    <div class="event-list-container">
-        <ul>
+    <div class="article-container">
+        <div class="article-title">
+            <a class="add-newfile-btn">افزودن فایل جدید</a>
+            <h1>فایل های اشتراک گذاشته شده</h1>
+            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+        </div>
+        <div class="birthday-container">
             {% for file in files %}
-                <li class="event-item">
-                    <a href="{{ file.file.url }}" download>{{ file.title }} ==> {{ file.created_at }}</a>
-                </li>
+                <div class="birthday">
+                    <div class="birthday-icon">
+                        <i class="fa-solid fa-file"></i>
+                    </div>
+                    <div class="birthday-title">
+                        {{ file.title }}
+                    </div>
+                    <a href="{{ file.file.url }}" class="birthday-user download-link" download>
+                        دانلود فایل <i class="fa-solid fa-download"></i>
+                    </a>
+                    <div class="birthday-date">
+                        {{ file.created_at|to_jalali }}
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 {% endblock %}

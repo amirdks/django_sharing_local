@@ -1,12 +1,32 @@
 {% extends 'shared/__layout.html' %}
+{% load static %}
+{% load jalali_tags %}
+{% block custom_header %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
 {% block content %}
-    <div class="event-list-container">
-        <ul>
+    <div class="article-container">
+         <a class="add-newfile-btn">افزودن خبر جدید</a>
+            <h1>خبر ها</h1>
+            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+        <div class="birthday-container">
             {% for new in news %}
-                <li class="event-item">
-                    <a href="{% url 'news_detail_view' new.pk %}">{{ new.title }} ==> {{ new.created_at|date }}</a>
-                </li>
+                <a href="{% url 'news_detail_view' new.pk %}" style="cursor: pointer; text-decoration: none; color: black" class="birthday">
+                    <div class="news-icon">
+                        <img src="{{ new.image.url }}" alt="">
+                    </div>
+                    <div class="birthday-title">
+                        {{ new.title }}
+                    </div>
+                    <div class="birthday-user news-user">
+                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="birthday-date">
+                        {{ new.created_at|to_jalali }}
+                    </div>
+                </a>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 {% endblock %}
