@@ -8,8 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css"
-              integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css"
+          integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     {% block custom_header %}{% endblock %}
@@ -49,19 +49,27 @@
                             class="fa-solid fa-newspaper"></i> <a href="{% url 'news_list_view' %}">اخبار</a></li>
                 </ul>
             </div>
-            <div class="sidebar-items-container">
-                <div class="sidebar-items-title">
-                    گزارشات ورود و خروج
+            {% if request.user.is_superuser %}
+                <div class="sidebar-items-container">
+                    <div class="sidebar-items-title">
+                        کارمندان
+                    </div>
+                    <ul>
+                        <li class="{% if request.resolver_match.url_name == 'user_list_view' %}active-item{% endif %}">
+                            <i class="fa-solid fa-users"></i> <a href="{% url 'user_list_view' %}">لیست کارمندان</a>
+                        </li>
+                        <li class="{% if request.resolver_match.url_name == 'login_report_view' %}active-item{% endif %}">
+                            <i
+                                    class="fa-solid fa-square-poll-vertical"></i> <a
+                                href="{% url 'login_report_view' %}">گزارشات
+                            ورود کارکنان</a></li>
+                        <li class="{% if request.resolver_match.url_name == 'logout_report_view' %}active-item{% endif %}">
+                            <i class="fa-solid fa-newspaper"></i> <a href="{% url 'logout_report_view' %}">گزارشات خروج
+                            کارکنان</a></li>
+                    </ul>
                 </div>
-                <ul>
-                    <li class="{% if request.resolver_match.url_name == 'login_report_view' %}active-item{% endif %}"><i
-                            class="fa-solid fa-square-poll-vertical"></i> <a href="{% url 'login_report_view' %}">گزارشات
-                        ورود کارکنان</a></li>
-                    <li class="{% if request.resolver_match.url_name == 'logout_report_view' %}active-item{% endif %}">
-                        <i class="fa-solid fa-newspaper"></i> <a href="{% url 'logout_report_view' %}">گزارشات خروج
-                        کارکنان</a></li>
-                </ul>
-            </div>
+            {% endif %}
+
         </div>
 
     </div>
@@ -69,9 +77,17 @@
         <div class="content-section">
             <div class="navbar-container">
                 <div class="user-profile-avatar-container">
-                    <img class="user-profile-avatar"
-                         src="{% static 'images/jurica-koletic-7YVZYZeITc8-unsplash.jpg' %}"
-                         alt=""><span class="user-profile-email">{{ request.user.full_name }}</span>
+
+                    {% if request.user.avatar %}
+                        <img class="user-profile-avatar"
+                             src="{{ request.user.avatar.url }}"
+                             alt="">
+                    {% else %}
+                        <img class="user-profile-avatar"
+                             src="{% static 'images/jurica-koletic-7YVZYZeITc8-unsplash.jpg' %}"
+                             alt="">
+                    {% endif %}
+                    <span class="user-profile-email">{{ request.user.full_name }}</span>
                 </div>
                 <span class="user-profile-email">{{ request.user.email }}</span>
                 <a class="user-profile-logout" href="{% url 'logout_view' %}"><i
@@ -84,7 +100,24 @@
     </article>
 </div>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     function showNotification(res, status) {
         Swal.fire({
             // `${status}`,
@@ -96,7 +129,7 @@
             showCancelButton: false,
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'باشه'
-        }).then(()=>{
+        }).then(() => {
             location.reload()
         })
     }

@@ -251,6 +251,61 @@
     color: white;
     cursor: pointer;
 }
-.report-table{
-    margin: 25px 0!important;
+
+.report-table {
+    margin: 25px 0 !important;
+}
+
+/*td:has(> div.user-action-btn ) {*/
+/*    display: flex;*/
+/*    justify-content: space-evenly;*/
+/*    align-items: center;*/
+/*}*/
+
+.user-action-btn {
+    padding: 15px 20px;
+    text-align: center;
+    width: 30%;
+    display: inline-block;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.edit-user-btn {
+    background-color: #686cba;
+    color: white !important;
+}
+
+.delete-user-btn {
+    background-color: #d83f3f;
+    color: white !important;
+}
+
+#user-create-form {
+    padding: 25px 0;
+}
+
+#user-create-form label {
+    margin: 20px 0;
+    display: block;
+}
+
+#user-create-form button {
+    display: block;
+    background-color: #4046B3;
+    border: none;
+    color: white;
+    padding: 15px 20px;
+    margin: 0 auto;
+    border-radius: 25px;
+}
+
+.table-is-superuser .fa-circle-check {
+    color: green;
+    font-size: 1.2rem;
+}
+
+.table-is-superuser .fa-circle-xmark {
+    color: #d83f3f;
+    font-size: 1.2rem;
 }

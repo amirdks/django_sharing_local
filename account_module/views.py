@@ -1,11 +1,12 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 
-from account_module.forms import LoginForm, RegisterForm
+from account_module.forms import LoginForm, RegisterForm, UserCreateForm, UserEditForm
+from account_module.mixins import JustSuperUser
 from account_module.models import *
 
 
@@ -78,3 +79,97 @@ class LogoutView(LoginRequiredMixin, View):
         UserLoggedOut.objects.create(user_id=request.user.id)
         logout(request)
         return redirect(reverse('login_view'))
+
+
+class UserListView(JustSuperUser, View):
+    def get(self, request):
+        context = {
+            'users': User.objects.all().exclude(id=request.user.id).order_by("-is_superuser")
+        }
+        return render(request, 'account_module/user-list.html', context)
+
+
+class UserCreateView(JustSuperUser, View):
+    def get(self, request):
+        form = UserCreateForm()
+        context = {
+            "form": form,
+        }
+        return render(request, "account_module/user-create.html", context)
+
+    def post(self, request):
+        form = UserCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            # full_name = form.cleaned_data.get("full_name")
+            email = form.cleaned_data.pop("email")
+            password = form.cleaned_data.pop("password")
+            is_superuser = form.cleaned_data.get("is_superuser")
+            # avatar = form.cleaned_data.get("avatar")
+            # na = form.cleaned_data.get("is_superuser")
+            if is_superuser:
+                new_user = User.objects.create_superuser(email, password, **form.cleaned_data)
+            else:
+                new_user = User.objects.create_user(email, password, **form.cleaned_data)
+            return redirect(reverse("user_list_view"))
+        context = {
+            'form': form
+        }
+        return render(request, "account_module/user-create.html", context)
+
+
+class UserDeleteView(JustSuperUser, View):
+    http_method_names = ["get"]
+
+    def get(self, request, pk):
+        try:
+            current_user = User.objects.get(id=pk)
+        except User.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "کاربر مورد نظر یافت نشد"})
+        if current_user.is_superuser:
+            return JsonResponse({"status": "error", "message": "نمیتوانید کاربر با دسترسی ویژه را حذف کنید"})
+        current_user.delete()
+        return JsonResponse({"status": "success", "message": "کاربر با موفقیت حذف شد"})
+
+
+class UserEditView(JustSuperUser, View):
+    def get(self, request, pk):
+        user: User = get_object_or_404(User, pk=pk, is_superuser=False)
+        user_init = {
+            "full_name": user.full_name,
+            "email": user.email,
+            "national_code": user.national_code,
+            "avatar": user.avatar,
+        }
+        form = UserEditForm(initial=user_init)
+        context = {
+            "user": user,
+            "form": form,
+        }
+        return render(request, "account_module/user-edit.html", context)
+
+    def post(self, request, pk):
+        user = get_object_or_404(User, pk=pk, is_superuser=False)
+        form = UserEditForm(request.POST, request.FILES)
+        if form.is_valid():
+            password = form.cleaned_data.get("password")
+            full_name = form.cleaned_data.get("full_name")
+            email = form.cleaned_data.get("email")
+            national_code = form.cleaned_data.get("national_code")
+            avatar = form.cleaned_data.get("avatar")
+            if password:
+                user.set_password(password)
+            if full_name:
+                user.full_name = full_name
+            if email:
+                user.email = email
+            if national_code:
+                user.national_code = national_code
+            if avatar:
+                user.avatar = avatar
+            user.save()
+            return redirect(reverse("user_list_view"))
+        context = {
+            "user": user,
+            "form": form,
+        }
+        return render(request, "account_module/user-edit.html", context)

@@ -3,6 +3,8 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from account_module.validation import is_valid_iran_code
+
 
 # Create your models here.
 
@@ -46,6 +48,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     full_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
+    national_code = models.CharField(max_length=10, unique=True, validators=[is_valid_iran_code])
+    avatar = models.ImageField(null=True, blank=True, upload_to="images/avatar")
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

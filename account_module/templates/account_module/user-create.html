@@ -1,0 +1,14 @@
+{% extends 'shared/__layout.html' %}
+{% load jalali_tags %}
+{% block content %}
+    <div class="article-container">
+        <div class="article-title">
+            <h1> افزودن کاربر</h1>
+        </div>
+        <form id="user-create-form" action="{% url 'user_add_view' %}" method="post" enctype="multipart/form-data">
+            {{ form }}
+            {% csrf_token %}
+            <button style="cursor: pointer" type="submit">ارسال</button>
+        </form>
+    </div>
+{% endblock %}

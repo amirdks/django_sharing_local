@@ -2,7 +2,8 @@ import datetime
 
 from django import forms
 
-from main_module.models import File, Event
+from account_module.models import User
+from main_module.models import File, Event, Birthday
 
 
 class FileAddForm(forms.ModelForm):
@@ -28,3 +29,9 @@ class EventAddForm(forms.Form):
         attrs={'class': 'form-control', 'id': 'datetime', 'data-ha-datetimepicker': '#datetime'}),
         label="زمان رویداد ")
 
+
+class BirthdayCreateForm(forms.Form):
+    text = forms.CharField(max_length=255, widget=forms.TextInput(attrs={"class": "form-control"}), label="متن تولد")
+    user = forms.ModelChoiceField(widget=forms.Select(attrs={"class": "form-control"}), label="برای کاربر",
+                                  queryset=User.objects.all())
+    birthday_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"class": "form-control"}), label="تاریخ تولد")
