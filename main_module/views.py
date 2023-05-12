@@ -6,8 +6,9 @@ from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
+from account_module.mixins import JustSuperUser
 from account_module.models import UserLoggedIn, UserLoggedOut
-from main_module.forms import FileAddForm, EventAddForm
+from main_module.forms import FileAddForm, EventAddForm, BirthdayCreateForm
 from main_module.models import File, Event, Birthday
 from news_module.models import News
 
@@ -71,14 +72,14 @@ class TestView(TemplateView):
     template_name = 'shared/__layout.html'
 
 
-class FileAddView(CreateView):
+class FileAddView(JustSuperUser, CreateView):
     form_class = FileAddForm
     model = File
     template_name = 'main_module/add-file.html'
     success_url = reverse_lazy('file_list_view')
 
 
-class LoginReportView(View):
+class LoginReportView(JustSuperUser, View):
     def get(self, request):
         context = {
             "logins": UserLoggedIn.objects.all()
@@ -86,7 +87,7 @@ class LoginReportView(View):
         return render(request, 'main_module/login-report.html', context)
 
 
-class LogoutReportView(View):
+class LogoutReportView(JustSuperUser, View):
     def get(self, request):
         context = {
             "logouts": UserLoggedOut.objects.all()
@@ -94,7 +95,7 @@ class LogoutReportView(View):
         return render(request, 'main_module/logout-report.html', context)
 
 
-class EventAddView(View):
+class EventAddView(JustSuperUser, View):
     def get(self, request):
         form = EventAddForm()
         context = {
@@ -104,18 +105,47 @@ class EventAddView(View):
 
     def post(self, request):
         print(request.POST)
-        end_time = request.POST.get('event_date')
-        print(end_time)
         # now_time_str = datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         # now_time = datetime.datetime.strptime(now_time_str, "%m/%d/%Y %H:%M:%S")
         # end_time_str = end_time.strftime("%m/%d/%Y %H:%M:%S")
-        end_time = end_time.strptime(end_time, "%m/%d/%Y %H:%M:%S")
-        request.POST["event_date"] = end_time
         form = EventAddForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data)
+            event_date = form.cleaned_data.get("event_date")
+            title = form.cleaned_data.get("title")
+            Event.objects.create(title=title, event_date=event_date)
             return redirect(reverse("event_list_view"))
         context = {
             'form': form
         }
         return render(request, 'main_module/add-event.html', context)
+
+
+# class EventCreateView(View):
+#     def get(self, request):
+#         form = EventAddForm()
+class BirthdayAddView(JustSuperUser, View):
+    def get(self, request):
+        form = BirthdayCreateForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'main_module/birthday-create.html', context)
+
+    def post(self, request):
+        print(request.POST)
+        # now_time_str = datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        # now_time = datetime.datetime.strptime(now_time_str, "%m/%d/%Y %H:%M:%S")
+        # end_time_str = end_time.strftime("%m/%d/%Y %H:%M:%S")
+        form = BirthdayCreateForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            text = form.cleaned_data.get("text")
+            user = form.cleaned_data.get("user")
+            birthday_date = form.cleaned_data.get("birthday_date")
+            Birthday.objects.create(text=text, user=user, birthday_date=birthday_date)
+            return redirect(reverse("birthday_list_view"))
+        context = {
+            'form': form
+        }
+        return render(request, 'main_module/birthday-create.html', context)

@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, DetailView
 
+from account_module.mixins import JustSuperUser
 from poll_module.models import Poll, PollOptions, Vote
 
 
@@ -51,3 +52,7 @@ class DeleteVoteView(View):
             vote.delete()
             return JsonResponse({"status": "success", "message": "رای شما با موفقیت حذف شد"})
         return JsonResponse({"status": "error", "message": "رای مورد نظر شما یافت نشد"})
+
+
+class PollAddView(JustSuperUser, View):
+    pass

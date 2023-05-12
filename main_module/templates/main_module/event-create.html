@@ -1,0 +1,26 @@
+{% extends 'shared/__layout.html' %}
+
+{% block content %}
+    <div class="article-container">
+        <div class="article-title">
+            <h1>افزودن خبر جدید</h1>
+        </div>
+        <form class="file-add-form" method="post" action="{% url 'news_add_view' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="file-add-input-group">
+                <label for="">عنوان خبر :</label>
+                {{ form.title }}
+            </div>
+            <div class="file-add-input-group">
+                <label for=""> متن خبر : </label>
+                {{ form.content }}
+            </div>
+            <div class="file-add-input-group">
+                <label for=""> تصویر خبر : </label>
+                {{ form.image }}
+            </div>
+
+            <button type="submit">تایید</button>
+        </form>
+    </div>
+{% endblock %}

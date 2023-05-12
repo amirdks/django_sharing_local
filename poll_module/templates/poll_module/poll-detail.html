@@ -1,6 +1,7 @@
 {% extends 'shared/__layout.html' %}
 {% load static %}
 {% load jalali_tags %}
+{% load poll_extras %}
 {% block custom_header %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
@@ -20,7 +21,7 @@
             <div style="border: none!important;" class="mew-infos-container">
                 <div class="new-author">نویسنده : {{ poll.owner.full_name }}</div>
                 <div class="new-author">تعداد رای های ثبت شده : {{ poll.all_count }}</div>
-                <div class="new-date">{{ poll.created_at.date | to_jalali }}</div>
+                <div class="new-date">{{ poll.created_at.date |show_jalali_date|change_month }}</div>
             </div>
             <div class="poll-option-container">
                 {% for option in poll.poll_option.all %}

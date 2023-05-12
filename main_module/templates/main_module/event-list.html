@@ -1,15 +1,20 @@
 {% extends 'shared/__layout.html' %}
 {% load static %}
 {% load jalali_tags %}
+{% load poll_extras %}
 {% block custom_header %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 {% block content %}
     <div class="article-container">
         <div class="article-title">
-            <a href="{% url 'event_add_view' %}" class="add-newfile-btn">افزودن رویداد جدید</a>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'event_add_view' %}" class="add-newfile-btn">افزودن رویداد جدید</a>
+            {% endif %}
             <h1>رویداد ها</h1>
-            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+            {% endif %}
         </div>
         <div class="events-container">
             {% for event in events %}
@@ -21,7 +26,8 @@
                         {{ event.title }}
                     </div>
                     <div class="event-date">
-                        {{ event.event_date|to_jalali }}
+                        {{ event.event_date|show_jalali_date|change_month }}
+                        <p>روزهای باقی مانده : {{ event.get_reaming_days }}</p>
                     </div>
                 </div>
             {% endfor %}

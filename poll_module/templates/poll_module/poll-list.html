@@ -1,6 +1,7 @@
 {% extends 'shared/__layout.html' %}
 {% load static %}
 {% load jalali_tags %}
+{% load poll_extras %}
 {% block custom_header %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
@@ -8,9 +9,13 @@
 {% block content %}
     <div class="article-container">
         <div class="article-title">
-            <a class="add-newfile-btn">افزودن نظرسنجی جدید</a>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'poll_add_view' %}" class="add-newfile-btn">افزودن نظرسنجی جدید</a>
+            {% endif %}
             <h1>نظرسنجی ها</h1>
-            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+            {% endif %}
         </div>
         <div class="birthday-container">
             {% for poll in polls %}
@@ -26,7 +31,7 @@
                         {{ poll.owner.full_name }} <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="birthday-date">
-                        {{ poll.created_at.date|to_jalali }}
+                        {{ poll.created_at.date|show_jalali_date|change_month }}
                     </div>
                 </a>
             {% endfor %}

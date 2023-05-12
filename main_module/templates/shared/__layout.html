@@ -10,7 +10,15 @@
     <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.0.0/css/bootstrap.min.css"
           integrity="sha384-P4uhUIGk/q1gaD/NdgkBIl3a6QywJjlsFJFk7SPRdruoGddvRVSwv5qFnvZ73cpz" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+
+    <script type="text/javascript" src="{% static 'src/ha-solardate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'src/ha-lunardate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'src/ha-datetimepicker.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'src/ha-datetimepicker.css' %}"/>
+
+
+    <link rel=" stylesheet
+    " href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     {% block custom_header %}{% endblock %}
     {#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}

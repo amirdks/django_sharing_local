@@ -1,6 +1,7 @@
 import datetime
 
 from django.db import models
+from django.utils import timezone
 
 
 # Create your models here.
@@ -21,11 +22,19 @@ class Event(models.Model):
     class Meta:
         ordering = ["event_date"]
 
+    def get_reaming_days(self):
+        res = self.event_date - timezone.now().date()
+        return f"{res.days} روز"
+
 
 class Birthday(models.Model):
     text = models.CharField(max_length=255)
     user = models.ForeignKey("account_module.User", on_delete=models.CASCADE)
     birthday_date = models.DateField()
+
+    def get_reaming_days(self):
+        res = self.birthday_date - timezone.now().date()
+        return f"{res.days} روز"
 
     class Meta:
         ordering = ["birthday_date"]

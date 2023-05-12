@@ -1,14 +1,45 @@
 {% extends 'shared/__layout.html' %}
-{% load jalali_tags %}
+
 {% block content %}
     <div class="article-container">
         <div class="article-title">
-            <h1> افزودن کاربر</h1>
+            <h1>افزودن رویداد جدید</h1>
         </div>
-        <form id="user-create-form" action="{% url 'user_add_view' %}" method="post">
-            {{ form }}
+        <form class="file-add-form" method="post" action="{% url 'birthday_add_view' %}">
             {% csrf_token %}
-            <button style="cursor: pointer" type="submit">ارسال</button>
+            <div class="file-add-input-group">
+                <label for="">متن تبریک :</label>
+                {{ form.text }}
+            </div>
+            <div class="file-add-input-group">
+                <label for=""> تاریخ تولد : </label>
+                {{ form.birthday_date }}
+            </div>
+            <div class="file-add-input-group">
+                <label for=""> برای کارمند : </label>
+                {{ form.user }}
+            </div>
+            <button type="submit">تایید</button>
         </form>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+
+        {% endfor %}
+
     </div>
+{% endblock %}
+{% block custom_script %}
+    <script>
+        let input = document.getElementById("datetime")
+        input.addEventListener("focus", (event) => {
+            var dp = new HaDateTimePicker("#datetime", {
+                isSolar: true,
+                {#forceSetTime: true,#}
+                resultFormat: '{year}-{month}-{day}',
+            });
+            dp.show();
+        })
+    </script>
 {% endblock %}

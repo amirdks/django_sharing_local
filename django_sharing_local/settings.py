@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'poll_module',
     'news_module',
     'main_module',
+    'polls',
     'jalali_date',
 ]
 
