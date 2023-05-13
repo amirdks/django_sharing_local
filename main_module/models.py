@@ -33,8 +33,11 @@ class Birthday(models.Model):
     birthday_date = models.DateField()
 
     def get_reaming_days(self):
-        res = self.birthday_date - timezone.now().date()
-        return f"{res.days} روز"
+        if self.birthday_date:
+            res = self.birthday_date - timezone.now().date()
+            return f"{res.days} روز"
+        else:
+            return "هنوز ست نشده"
 
     class Meta:
         ordering = ["birthday_date"]

@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView
 
 from account_module.mixins import JustSuperUser
-from account_module.models import UserLoggedIn, UserLoggedOut
+from account_module.models import UserLoggedIn, UserLoggedOut, User
 from main_module.forms import FileAddForm, EventAddForm, BirthdayCreateForm
 from main_module.models import File, Event, Birthday
 from news_module.models import News
@@ -35,10 +35,17 @@ class EventListView(LoginRequiredMixin, ListView):
     context_object_name = "events"
 
 
-class BirthdayListView(LoginRequiredMixin, ListView):
+class BirthdayListView(LoginRequiredMixin, View):
     model = Birthday
     template_name = "main_module/birthday-list.html"
     context_object_name = "birthdays"
+
+    def get(self, request):
+        users = User.objects.all().order_by("birthday_date")
+        context = {
+            "birthdays": users
+        }
+        return render(request, 'main_module/birthday-list.html', context)
 
 
 class FileListView(LoginRequiredMixin, ListView):

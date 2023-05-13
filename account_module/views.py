@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import IntegrityError
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -100,17 +101,19 @@ class UserCreateView(JustSuperUser, View):
     def post(self, request):
         form = UserCreateForm(request.POST, request.FILES)
         if form.is_valid():
-            # full_name = form.cleaned_data.get("full_name")
             email = form.cleaned_data.pop("email")
             password = form.cleaned_data.pop("password")
             is_superuser = form.cleaned_data.get("is_superuser")
-            # avatar = form.cleaned_data.get("avatar")
-            # na = form.cleaned_data.get("is_superuser")
-            if is_superuser:
-                new_user = User.objects.create_superuser(email, password, **form.cleaned_data)
-            else:
-                new_user = User.objects.create_user(email, password, **form.cleaned_data)
-            return redirect(reverse("user_list_view"))
+            try:
+                if is_superuser:
+
+                    new_user = User.objects.create_superuser(email, password, **form.cleaned_data)
+                else:
+                    new_user = User.objects.create_user(email, password, **form.cleaned_data)
+                return redirect(reverse("user_list_view"))
+            except IntegrityError as e:
+                form.add_error("email", "ایمیل و یا کد ملی وارد شده تکراری میباشد")
+                form.add_error("national_code", "ایمیل و یا کد ملی وارد شده تکراری میباشد")
         context = {
             'form': form
         }
@@ -134,13 +137,14 @@ class UserDeleteView(JustSuperUser, View):
 class UserEditView(JustSuperUser, View):
     def get(self, request, pk):
         user: User = get_object_or_404(User, pk=pk, is_superuser=False)
-        user_init = {
-            "full_name": user.full_name,
-            "email": user.email,
-            "national_code": user.national_code,
-            "avatar": user.avatar,
-        }
-        form = UserEditForm(initial=user_init)
+        # user_init = {
+        #     "full_name": user.full_name,
+        #     "email": user.email,
+        #     "national_code": user.national_code,
+        #     "avatar": user.avatar,
+        #     "birthday_date": user.birthday_date,
+        # }
+        form = UserEditForm(instance=user)
         context = {
             "user": user,
             "form": form,
@@ -149,27 +153,18 @@ class UserEditView(JustSuperUser, View):
 
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk, is_superuser=False)
-        form = UserEditForm(request.POST, request.FILES)
+        form = UserEditForm(request.POST, request.FILES, instance=user)
+        print("valid")
         if form.is_valid():
-            password = form.cleaned_data.get("password")
-            full_name = form.cleaned_data.get("full_name")
-            email = form.cleaned_data.get("email")
-            national_code = form.cleaned_data.get("national_code")
-            avatar = form.cleaned_data.get("avatar")
-            if password:
-                user.set_password(password)
-            if full_name:
-                user.full_name = full_name
-            if email:
-                user.email = email
-            if national_code:
-                user.national_code = national_code
-            if avatar:
-                user.avatar = avatar
-            user.save()
+            form.save()
             return redirect(reverse("user_list_view"))
         context = {
             "user": user,
             "form": form,
         }
         return render(request, "account_module/user-edit.html", context)
+
+
+class CallLogView(JustSuperUser,View):
+    def get(self, request):
+        return render(request, "account_module/call-log.html")

@@ -1,11 +1,16 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
 
 from account_module.mixins import JustSuperUser
+from poll_module.forms import PollCreateForm
 from poll_module.models import Poll, PollOptions, Vote
+from utils.form_errors import form_error
 
 
 # Create your views here.
@@ -55,4 +60,26 @@ class DeleteVoteView(View):
 
 
 class PollAddView(JustSuperUser, View):
-    pass
+    def get(self, request):
+        form = PollCreateForm()
+        context = {
+            "form": form,
+        }
+        return render(request, 'poll_module/poll-add.html', context)
+
+    def post(self, request: HttpRequest):
+        form = PollCreateForm(request.POST)
+        if form.is_valid():
+            option_list = form.cleaned_data.get("option_list")
+            question = form.cleaned_data.get("question")
+            created_poll = Poll.objects.create(question=question, owner_id=request.user.id)
+            for option in option_list:
+                PollOptions.objects.create(option=option, poll_id=created_poll.id)
+            return JsonResponse({"status": "success", "message": "نظرسنجی شما با موفقیت اضافه شد"})
+        else:
+            error = form_error(form)
+            print(error)
+        context = {
+            "form": form,
+        }
+        return render(request, 'poll_module/poll-add.html', context)

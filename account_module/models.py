@@ -1,6 +1,9 @@
+import datetime
+
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from account_module.validation import is_valid_iran_code
@@ -48,13 +51,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     full_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
-    national_code = models.CharField(max_length=10, unique=True, validators=[is_valid_iran_code])
+    national_code = models.CharField(max_length=10, null=True, unique=True, validators=[is_valid_iran_code])
+    birthday_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True, upload_to="images/avatar")
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = "email"
+    # REQUIRED_FIELDS = ["full_name", "national_code", "email"]
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -63,6 +68,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    @property
+    def get_reaming_days(self):
+        if self.birthday_date:
+            res = self.birthday_date - timezone.now().date()
+            return f"{res.days} روز"
+        else:
+            return "هنوز ست نشده"
+
+    @property
+    def reaming_date(self):
+        return self.birthday_date - timezone.now().date()
 
 
 class UserLoggedIn(models.Model):

@@ -1,10 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'shared/__layout.html' %}
 
-</body>
-</html>
+{% block content %}
+    <div class="article-container">
+        <div class="article-title">
+            <h1>افزودن نظر سنجی جدید</h1>
+        </div>
+        <form id="poll-create-form" class="file-add-form" method="post" action="{% url 'poll_add_view' %}">
+            {% csrf_token %}
+            <div class="file-add-input-group">
+                <label for="">سوال نظرسنجی :</label>
+                {{ form.question }}
+            </div>
+            <div class="poll-option-container-xd">
+                <h1 class="poll-option-title">
+                    گزینه های نظر سنجی
+                </h1>
+                <div id="poll-option-section-container">
+                    <div class="poll-option-section">
+                        <span>1</span>
+                        <input type="text" class="poll-option-input">
+                    </div>
+                </div>
+                <button onclick="addOption()" type="button" class="poll-option-plus-btn">
+                    <i class="fa-solid fa-plus"></i> اضافه کردن مورد جدید
+                </button>
+            </div>
+            <button type="submit">تایید</button>
+        </form>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block custom_script %}
+    <script>
+        let num = 1
+        let csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value
+
+        function addOption() {
+            num += 1
+            let optionInput = `<span>1</span>
+                    <input type="text" class="poll-option-input">`
+            let inputContainer = document.getElementById("poll-option-section-container")
+
+            function appendSpan(num) {
+                let span = document.createElement("span")
+                span.innerHTML = `${num}`
+                return span
+            }
+
+            function appendInput() {
+                let input = document.createElement("input")
+                input.type = "text";
+                input.required = "true";
+                input.classList.add("poll-option-input")
+                return input
+            }
+
+            let inputSection = document.createElement("div")
+            inputSection.classList.add("poll-option-section")
+
+            inputSection.appendChild(appendSpan(num))
+            inputSection.appendChild(appendInput())
+            inputContainer.appendChild(inputSection)
+        }
+
+        let pollForm = document.getElementById("poll-create-form")
+        pollForm.addEventListener("submit", (event) => {
+            event.preventDefault()
+            let data = {
+                question: document.getElementById("question-title").value,
+                option_list: []
+            }
+            let inputListElements = document.querySelectorAll(".poll-option-section input")
+            for (const input of inputListElements) {
+                data.option_list.push(input.value);
+            }
+            data["option_list"] = JSON.stringify(data.option_list);
+            console.log(data)
+            $.ajax({
+                url: event.target.action,
+                method: "POST",
+                data: data,
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    {#'Accept-Content': 'application/json'#}
+                },
+                success: function (res) {
+                    if (res.status === "success") {
+                        res["callBack"] = () => {
+                            // TODO :replace this
+                            location.replace("http://127.0.0.1:8000/polls/")
+                        }
+                        showNotification(res, "موفق")
+                    } else if (res.status === "error") {
+                        showNotification(res, "شکست")
+                    }
+                }
+            })
+
+        })
+    </script>
+{% endblock %}

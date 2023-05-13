@@ -5,10 +5,25 @@
         <div class="article-title">
             <h1> ویرایش کاربر {{ user.full_name }}</h1>
         </div>
-        <form id="user-create-form" action="{% url 'user_edit_view' pk=user.id %}" method="post" enctype="multipart/form-data">
+        <form id="user-create-form" action="{% url 'user_edit_view' pk=user.id %}" method="post"
+              enctype="multipart/form-data">
             {{ form }}
             {% csrf_token %}
             <button style="cursor: pointer" type="submit">ارسال</button>
         </form>
     </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        let input = document.getElementById("datetime")
+        input.addEventListener("focus", (event) => {
+            var dp = new HaDateTimePicker("#datetime", {
+                isSolar: true,
+                {#forceSetTime: true,#}
+                resultFormat: '{year}-{month}-{day}',
+            });
+            dp.show();
+        })
+    </script>
 {% endblock %}
