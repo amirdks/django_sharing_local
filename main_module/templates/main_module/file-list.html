@@ -32,6 +32,11 @@
                     <div class="birthday-date">
                         {{ file.created_at|to_jalali }}
                     </div>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'file_delete_view' pk=file.id %}" class="event-delete-icon">
+                            حذف کردن
+                        </a>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

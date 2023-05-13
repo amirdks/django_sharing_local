@@ -29,6 +29,12 @@
                         {{ event.event_date|show_jalali_date|change_month }}
                         <p>روزهای باقی مانده : {{ event.get_reaming_days }}</p>
                     </div>
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'event_delete_view' pk=event.id %}" class="event-delete-icon">
+                            حذف کردن
+                        </a>
+                    {% endif %}
+
                 </div>
             {% endfor %}
 

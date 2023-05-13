@@ -1,0 +1,17 @@
+{% extends 'shared/__layout.html' %}
+
+{% block content %}
+    <div class="article-container">
+    <div class="article-title">
+            <form method="post" class="card delete-confirm-form">
+                {% csrf_token %}
+                <h2>حذف خبر "{{ new.title }} "</h2>
+                <p>آیا از حذف این خبر مطمین هستید</p>
+                <p class="form-buttons">
+                    <input type="submit" class="btn btn-primary" value="تایید">
+                    <a href="{% url 'news_list_view' %}" class="btn btn-outline">لغو</a>
+                </p>
+            </form>
+    </div>
+    </div>
+{% endblock %}

@@ -33,6 +33,9 @@
                     <div class="birthday-date">
                         {{ poll.created_at.date|show_jalali_date|change_month }}
                     </div>
+{#                <a href="{% url 'poll_delete_view' pk=poll.id %}" class="event-delete-icon">#}
+{#                    حذف کردن#}
+{#                </a>#}
                 </a>
             {% endfor %}
         </div>

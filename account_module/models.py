@@ -72,8 +72,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def get_reaming_days(self):
         if self.birthday_date:
-            res = self.birthday_date - timezone.now().date()
-            return f"{res.days} روز"
+            res = self.birthday_date.replace(year=timezone.now().date().year) - timezone.now().date()
+            if res.days > 0:
+                return f"{res.days} روز"
+            elif res.days < 0:
+                res = self.birthday_date.replace(year=timezone.now().date().year + 1) - timezone.now().date()
+                return f"{res.days} روز"
+            elif res.days == 0:
+                return "امروز تولدشه"
         else:
             return "هنوز ست نشده"
 

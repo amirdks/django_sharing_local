@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import ListView, DetailView, TemplateView, CreateView
+from django.views.generic import ListView, DetailView, TemplateView, CreateView, DeleteView
 
 from account_module.mixins import JustSuperUser
 from account_module.models import UserLoggedIn, UserLoggedOut, User
@@ -18,7 +18,7 @@ class HomeView(LoginRequiredMixin, View):
     def get(self, request):
         files = File.objects.all()[:8]
         news = News.objects.all()[:8]
-        birthdays = Birthday.objects.all()[:8]
+        birthdays = User.objects.all().order_by("birthday_date")
         events = Event.objects.all()[:8]
         context = {
             "files": files,
@@ -156,3 +156,19 @@ class BirthdayAddView(JustSuperUser, View):
             'form': form
         }
         return render(request, 'main_module/birthday-create.html', context)
+
+
+class EventDeleteView(JustSuperUser, DeleteView):
+    model = Event
+    context_object_name = 'event'
+    success_url = reverse_lazy('event_list_view')
+
+    # def form_valid(self, form):
+    #     messages.success(self.request, "The task was deleted successfully.")
+    #     return super(TaskDelete, self).form_valid(form)
+
+
+class FileDeleteView(JustSuperUser, DeleteView):
+    model = File
+    context_object_name = 'file'
+    success_url = reverse_lazy('file_list_view')

@@ -3,8 +3,9 @@ from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView
 
+from account_module.mixins import JustSuperUser
 from news_module.forms import NewsAddForm
 from news_module.models import News
 
@@ -41,3 +42,9 @@ class NewsAddView(View):
             "form": form
         }
         return render(request, 'news_module/add-news.html', context)
+
+
+class NewsDeleteView(JustSuperUser,DeleteView):
+    model = News
+    context_object_name = 'new'
+    success_url = reverse_lazy('news_list_view')

@@ -28,6 +28,9 @@
                     <div class="birthday-date">
                         {{ new.created_at|to_jalali }}
                     </div>
+{#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
+{#                    حذف کردن#}
+{#                </a>#}
                 </a>
             {% endfor %}
         </div>

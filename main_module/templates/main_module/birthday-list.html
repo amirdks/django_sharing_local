@@ -9,13 +9,7 @@
 {% block content %}
     <div class="article-container">
         <div class="article-title">
-            {% if request.user.is_superuser %}
-                <a href="{% url 'birthday_add_view' %}" class="add-newfile-btn">افزودن تولد جدید</a>
-            {% endif %}
             <h1>تولد ها</h1>
-            {% if request.user.is_superuser %}
-                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
-            {% endif %}
         </div>
         <div class="birthday-container">
             {% for birthday in birthdays %}
@@ -27,12 +21,15 @@
                         تولد {{ birthday.full_name }}
                     </div>
                     <div class="birthday-user">
-                        {{ birthday.user.full_name }} <i class="fa-solid fa-user"></i>
+                        {{ birthday.full_name }} <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="birthday-date">
                         {{ birthday.birthday_date|show_jalali_date|change_month }}
-                         <p>روزهای باقی مانده : {{ birthday.get_reaming_days }}</p>
+                        <p>روزهای باقی مانده : {{ birthday.get_reaming_days }}</p>
                     </div>
+{#                <span class="event-delete-icon">#}
+{#                    حذف کردن#}
+{#                </span>#}
                 </div>
             {% endfor %}
         </div>

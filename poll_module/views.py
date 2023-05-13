@@ -3,9 +3,9 @@ import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 
 from account_module.mixins import JustSuperUser
 from poll_module.forms import PollCreateForm
@@ -83,3 +83,9 @@ class PollAddView(JustSuperUser, View):
             "form": form,
         }
         return render(request, 'poll_module/poll-add.html', context)
+
+
+class PollDeleteView(JustSuperUser, DeleteView):
+    model = Poll
+    context_object_name = 'poll'
+    success_url = reverse_lazy('poll_list_view')

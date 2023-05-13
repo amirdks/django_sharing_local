@@ -1,6 +1,7 @@
 {% extends 'shared/__layout.html' %}
 {% load static %}
 {% load jalali_tags %}
+{% load poll_extras %}
 {% block custom_header %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
@@ -64,13 +65,13 @@
                         <i class="fa-solid fa-cake-candles"></i>
                     </div>
                     <div class="birthday-title">
-                        {{ birthday.text }}
+                        تولد {{ birthday.full_name }}
                     </div>
                     <div class="birthday-user">
-                        {{ birthday.user.full_name }} <i class="fa-solid fa-user"></i>
+                        {{ birthday.full_name }} <i class="fa-solid fa-user"></i>
                     </div>
                     <div class="birthday-date">
-                        {{ birthday.birthday_date|to_jalali }}
+                        {{ birthday.birthday_date|show_jalali_date|change_month}}
                     </div>
                 </div>
             {% endfor %}
