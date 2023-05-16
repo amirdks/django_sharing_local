@@ -273,12 +273,12 @@
     align-items: center;
 }
 
-.file-add-input-group input, textarea {
+.file-add-input-group input, textarea, select {
     border: 1px solid #4046B3;
     padding: 5px 10px;
     border-radius: 10px;
     outline: none;
-    width: 30%;
+    width: 30%!important;
 }
 
 .file-add-form button {
@@ -413,4 +413,16 @@
 .delete-confirm-form *{
     margin: 10px;
     font-size: 1.3rem;
+}
+.contact-show-btn{
+    background-color: #E9A63A;
+     border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    width: max-content;
+    margin: 0 auto;
+    display: block;
+    border: none;
+    text-align: center;
+    padding: 15px 20px;
 }

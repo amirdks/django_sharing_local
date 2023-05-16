@@ -18,6 +18,9 @@ body {
     background-color: #4046B3;
     min-height: 100vh;
     position: fixed;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
 }
 
 .content-container {
@@ -31,7 +34,6 @@ body {
     width: 80%;
     margin: 0 auto;
     color: white;
-
 }
 
 .sidebar-title-container {
