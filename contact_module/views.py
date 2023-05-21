@@ -61,8 +61,12 @@ class ContactGetReport(JustSuperUser, View):
     def get(self, request):
         data = {}
         now_date = timezone.now()
-        yesterday = timezone.datetime(year=now_date.year, month=now_date.month, day=now_date.day, hour=0, minute=0,second=0, microsecond=0)
-        contacts = UnusualContactReason.objects.annotate(field_count=Count('contact')).filter(contact__created_at__gt=yesterday)
+        yesterday = timezone.datetime(year=now_date.year, month=now_date.month, day=now_date.day, hour=0, minute=0,
+                                      second=0, microsecond=0)
+        contacts = UnusualContactReason.objects.annotate(field_count=Count('contact')).filter(
+            contact__created_at__lt=yesterday)
+        if not contacts:
+            return HttpResponse("امروز هیچ ارتباطی توسط کارمندان ثبت نشده است")
         for contact in contacts:
             data[contact.title] = contact.field_count
         courses = list(data.keys())
