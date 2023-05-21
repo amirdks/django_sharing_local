@@ -1,13 +1,19 @@
+import datetime
 import io
 import time
+import uuid
 
+from PIL.ImageFile import ImageFile
 from arabic_reshaper import arabic_reshaper
 from bidi.algorithm import get_display
+from dateutil import tz
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.files.images import ImageFile
+from django.core.files import File
+from django.core.files.base import ContentFile
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.views import View
 from matplotlib import pyplot as plt
 from django.db.models.aggregates import Count
@@ -51,22 +57,18 @@ class ContactListView(JustSuperUser, View):
         return render(request, 'contact_module/contact-list.html', context)
 
 
-class ContactTestView(View):
+class ContactGetReport(JustSuperUser, View):
     def get(self, request):
         data = {}
-        contacts = UnusualContactReason.objects.annotate(field_count=Count('contact'))
+        now_date = timezone.now()
+        yesterday = timezone.datetime(year=now_date.year, month=now_date.month, day=now_date.day, hour=0, minute=0,second=0, microsecond=0)
+        contacts = UnusualContactReason.objects.annotate(field_count=Count('contact')).filter(contact__created_at__gt=yesterday)
         for contact in contacts:
-            test = arabic_reshaper.reshape(u'{0}'.format(contact.field_count))
-            test = get_display(test)
-            data[contact.title] = test
-        # data = {'C': 20, 'C++': 15, 'Java': 30,
-        #         'Python': 35}
+            data[contact.title] = contact.field_count
         courses = list(data.keys())
         values = list(data.values())
 
         fig = plt.figure(figsize=(10, 5))
-        # ax.set_yticklabels([u'é', u'ã', u'â'])
-        # creating the bar plot
         plt.bar(courses, values, color='maroon',
                 width=0.4)
         xlabel = arabic_reshaper.reshape(u'لیست گرینه ها')
@@ -78,9 +80,10 @@ class ContactTestView(View):
         plt.xlabel(xlabel, fontdict=None, labelpad=None)
         plt.ylabel(ylabel, fontdict=None, labelpad=None)
         plt.title(plt_title, fontdict=None)
-        figure = io.BytesIO()
-        plt.savefig(figure, format="png")
-        time.sleep(2)
-        image_file = ImageFile(figure)
-        ContactReport.objects.create(image=image_file)
-        return HttpResponse("salam kheyli khoobe")
+        # figure = io.BytesIO()
+        generated_uuid = uuid.uuid4()
+        plt_file_name = f'media/images/plt-{generated_uuid}.png'
+        plt.savefig(plt_file_name, format='png')
+        instance = ContactReport(image=f"images/plt-{generated_uuid}.png")
+        instance.save()
+        return redirect(reverse("contact_list_view"))

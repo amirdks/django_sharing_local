@@ -14,7 +14,7 @@ class UnusualContactReason(models.Model):
 class Contact(models.Model):
     sender = models.ForeignKey('account_module.User', on_delete=models.CASCADE)
     agent = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=13, unique=True)
+    phone_number = models.CharField(max_length=13)
     unusual_contact_reason = models.ForeignKey('UnusualContactReason', on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
@@ -25,4 +25,4 @@ class Contact(models.Model):
 
 class ContactReport(models.Model):
     image = models.ImageField(upload_to="images/matplotlib")
-    date = models.DateField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)

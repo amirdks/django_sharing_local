@@ -40,11 +40,13 @@
     </div>
     <div class="article-container">
         <div class="article-title">
+            <a href="{% url 'add_new_contact_report' %}" class="add-newfile-btn">گرفتن گزارش امروز</a>
             <h1>گزارشات ارتباط ها</h1>
+            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
         </div>
         <div class="birthday-container">
             {% for report in reports %}
-                <a href="#"
+                <a href="{{ report.image.url }}"
                    style="cursor: pointer; text-decoration: none; color: black" class="birthday">
                     <div class="news-icon">
                         <img src="{{ report.image.url }}" alt="">
@@ -56,7 +58,7 @@
                     {#                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>#}
                     {#                    </div>#}
                     <div class="birthday-date">
-                        {{ new.date|show_jalali_date|change_month }}
+                        {{ report.date.date|show_jalali_date|change_month }} - {{ report.date.time }}
                     </div>
                     {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
                     {#                    حذف کردن#}
