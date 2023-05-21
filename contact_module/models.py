@@ -21,3 +21,8 @@ class Contact(models.Model):
 
     def __str__(self):
         return self.sender.email
+
+
+class ContactReport(models.Model):
+    image = models.ImageField(upload_to="images/matplotlib")
+    date = models.DateField(auto_now_add=True)

@@ -38,6 +38,33 @@
             {% endfor %}
         </div>
     </div>
+    <div class="article-container">
+        <div class="article-title">
+            <h1>گزارشات ارتباط ها</h1>
+        </div>
+        <div class="birthday-container">
+            {% for report in reports %}
+                <a href="#"
+                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
+                    <div class="news-icon">
+                        <img src="{{ report.image.url }}" alt="">
+                    </div>
+                    {#                    <div class="birthday-title">#}
+                    {#                        {{ new.title }}#}
+                    {#                    </div>#}
+                    {#                    <div class="birthday-user news-user">#}
+                    {#                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>#}
+                    {#                    </div>#}
+                    <div class="birthday-date">
+                        {{ new.date|show_jalali_date|change_month }}
+                    </div>
+                    {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
+                    {#                    حذف کردن#}
+                    {#                </a>#}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
 
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
