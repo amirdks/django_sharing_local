@@ -1,5 +1,6 @@
 {% extends 'shared/__layout.html' %}
 {% load jalali_tags %}
+{% load poll_extras %}
 {% block content %}
     <div class="article-container">
         <div class="article-title">
@@ -21,7 +22,7 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ logout.user.full_name }}</td>
                     <td>{{ logout.user.email }}</td>
-                    <td>{{ logout.created_at.date | to_jalali }}</td>
+                    <td>{{ logout.created_at.date | show_jalali_date | change_month }}</td>
                  <td>{{ logout.created_at | time }}</td>
                 </tr>
             {% endfor %}

@@ -140,7 +140,6 @@ class BirthdayAddView(JustSuperUser, View):
         return render(request, 'main_module/birthday-create.html', context)
 
     def post(self, request):
-        print(request.POST)
         # now_time_str = datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         # now_time = datetime.datetime.strptime(now_time_str, "%m/%d/%Y %H:%M:%S")
         # end_time_str = end_time.strftime("%m/%d/%Y %H:%M:%S")

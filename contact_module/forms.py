@@ -13,7 +13,7 @@ def validate_mobile(value):
 
 
 class ContactForm(forms.Form):
-    agent = forms.CharField(max_length=255, widget=forms.TextInput(), label="نام ایجنت پاسخو")
+    # agent = forms.CharField(max_length=255, widget=forms.TextInput(), label="نام ایجنت پاسخو")
     phone_number = forms.CharField(max_length=13, widget=forms.TextInput(), label="شماره تلفن همراه")
     unusual_contact_reason = forms.ModelChoiceField(queryset=UnusualContactReason.objects.all(),
                                                     widget=forms.Select(attrs={"class": "form-control"}),
