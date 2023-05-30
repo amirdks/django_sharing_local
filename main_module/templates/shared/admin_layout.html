@@ -1,0 +1,233 @@
+{% load static %}
+{% load thumbnail %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="fontiran.com:license" content="Y68A9">
+    <title>تورنادور</title>
+
+    <!-- Bootstrap -->
+    <link rel=" stylesheet
+    " href="{% static 'custom_admin/vendors/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link href="{% static 'custom_admin/vendors/bootstrap-rtl/dist/css/bootstrap-rtl.min.css' %}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="{% static 'custom_admin/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="{% static 'custom_admin/vendors/nprogress/nprogress.css' %}" rel="stylesheet">
+    <!-- bootstrap-progressbar -->
+    <link href="{% static 'custom_admin/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css' %}"
+          rel="stylesheet">
+    <!-- iCheck -->
+    <link href="{% static 'custom_admin/vendors/iCheck/skins/flat/green.css' %}" rel="stylesheet">
+    <!-- bootstrap-daterangepicker -->
+    <link href="{% static 'custom_admin/vendors/bootstrap-daterangepicker/daterangepicker.css' %}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="{% static 'custom_admin/build/css/custom.min.css' %}" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3b50011dc6.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'src/ha-solardate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'src/ha-lunardate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'src/ha-datetimepicker.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'src/ha-datetimepicker.css' %}"/>
+    <link rel=" stylesheet
+    " href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    {% block custom_style %}{% endblock %}
+</head>
+<!-- /header content -->
+<body class="nav-md">
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col hidden-print">
+            <div class="left_col scroll-view">
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="/" class="site_title"><span style="margin-right: 25px">تورنادور</span></a>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <!-- menu profile quick info -->
+                <div class="profile clearfix">
+                    <div class="profile_pic">
+                        {% thumbnail request.user.profile.image "200x200" crop="center" quality=90 as im %}
+                            <img class="img-circle profile_img" src="{{ im.url }}" alt="{{ im.url }}">
+                        {% empty %}
+                            <img src="{% static 'custom_admin/build/images/img.jpg' %}" alt="..."
+                                 class="img-circle profile_img">
+                        {% endthumbnail %}
+
+                    </div>
+                    <div class="profile_info">
+                        <span>خوش آمدید,</span>
+                        <h2>{{ request.user.profile.get_full_name_res }}</h2>
+                    </div>
+                </div>
+                <!-- /menu profile quick info -->
+
+                <br/>
+
+                <!-- sidebar menu -->
+                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                    <div class="menu_section">
+                        <h3>دسترسی ها</h3>
+                        <ul class="nav side-menu">
+                            <li><a><i class="fa-solid fa-house"></i> منوی اصلی <span
+                                    class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{% url 'home_view' %}">خانه</a></li>
+                                    <li><a href="{% url 'event_list_view' %}">رویداد ها</a></li>
+                                    <li><a href="{% url 'birthday_list_view' %}">تولد ها</a></li>
+                                    <li><a href="{% url 'file_list_view' %}">فایل های اشتراک گذاری شده</a></li>
+                                    <li><a href="{% url 'contact_view' %}">ارتباط با اپراتور</a></li>
+                                </ul>
+                            </li>
+                            <li><a><i class="fa-solid fa-newspaper"></i> نظرسنجی ها و اخبار <span
+                                    class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{% url 'poll_list_view' %}">نظرسنجی ها</a></li>
+                                    <li><a href="{% url 'news_list_view' %}">اخبار</a></li>
+                                </ul>
+                            </li>
+                            <li><a><i class="fa-solid fa-users"></i> کارمندان <span
+                                    class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{% url 'user_list_view' %}">لیست کارمندان</a></li>
+                                    <li><a href="{% url 'login_report_view' %}">گزارشات ورود کارمندان</a></li>
+                                    <li><a href="{% url 'logout_report_view' %}">گزارشات خروج کارمندان</a></li>
+                                    <li><a href="{% url 'call_log_view' %}">گزارشات تماس</a></li>
+                                    <li><a href="{% url 'contact_list_view' %}">لیست ارتباطات</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- /sidebar menu -->
+
+                <!-- /menu footer buttons -->
+                <!-- /menu footer buttons -->
+            </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav hidden-print">
+            <div class="nav_menu">
+                <nav>
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="">
+                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                               aria-expanded="false">
+                                {% if request.user.profile.image %}
+                                    <img src="{{ request.user.profile.image.url }}" alt="">
+                                {% else %}
+                                    <img src="{% static 'custom_admin/build/images/img.jpg' %}" alt="">
+                                {% endif %}
+                                {{ request.user.profile.get_full_name_res }}
+                                <span class=" fa fa-angle-down"></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-usermenu pull-right">
+                                <li><a href="javascript:;"> نمایه</a></li>
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="badge bg-red pull-right">50%</span>
+                                        <span>تنظیمات</span>
+                                    </a>
+                                </li>
+                                <li><a href="javascript:;">کمک</a></li>
+                                <li><a href="{% url 'logout_view' %}"><i class="fa fa-sign-out pull-right"></i> خروج</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- /top navigation -->
+        <!-- /header content -->
+
+
+        <div class="right_col" role="main">
+            {% block content %}{% endblock %}
+        </div>
+
+
+        <!-- footer content -->
+        <!-- /footer content -->
+    </div>
+</div>
+<div id="lock_screen">
+    <table>
+        <tr>
+            <td>
+                <div class="clock"></div>
+                <span class="unlock">
+                    <span class="fa-stack fa-5x">
+                      <i class="fa fa-square-o fa-stack-2x fa-inverse"></i>
+                      <i id="icon_lock" class="fa fa-lock fa-stack-1x fa-inverse"></i>
+                    </span>
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- jQuery -->
+<script src="{% static 'custom_admin/vendors/jquery/dist/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'custom_admin/vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'custom_admin/vendors/fastclick/lib/fastclick.js' %}"></script>
+<!-- NProgress -->
+<script src="{% static 'custom_admin/vendors/nprogress/nprogress.js' %}"></script>
+<!-- bootstrap-progressbar -->
+<script src="{% static 'custom_admin/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
+<!-- iCheck -->
+<script src="{% static 'custom_admin/vendors/iCheck/icheck.min.js' %}"></script>
+
+<!-- bootstrap-daterangepicker -->
+<script src="{% static 'custom_admin/vendors/moment/min/moment.min.js' %}"></script>
+
+<script src="{% static 'custom_admin/vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
+
+<!-- Chart.js' %} -->
+<script src="{% static 'custom_admin/vendors/Chart.js' %}/dist/Chart.min.js' %}"></script>
+<!-- jQuery Sparklines -->
+<script src="{% static 'custom_admin/vendors/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
+<!-- gauge.js' %} -->
+<script src="{% static 'custom_admin/vendors/gauge.js' %}/dist/gauge.min.js' %}"></script>
+<!-- Skycons -->
+<script src="{% static 'custom_admin/vendors/skycons/skycons.js' %}"></script>
+<!-- Flot -->
+<script src="{% static 'custom_admin/vendors/Flot/jquery.flot.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/Flot/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/Flot/jquery.flot.time.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/Flot/jquery.flot.stack.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/Flot/jquery.flot.resize.js' %}"></script>
+<!-- Flot plugins -->
+<script src="{% static 'custom_admin/vendors/flot.orderbars/js/jquery.flot.orderBars.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/flot-spline/js/jquery.flot.spline.min.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/flot.curvedlines/curvedLines.js' %}"></script>
+<!-- DateJS -->
+<script src="{% static 'custom_admin/vendors/DateJS/build/production/date.min.js' %}"></script>
+<!-- JQVMap -->
+<script src="{% static 'custom_admin/vendors/jqvmap/dist/jquery.vmap.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+<script src="{% static 'custom_admin/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js' %}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Custom Theme Scripts -->
+<script src="{% static 'custom_admin/build/js/custom.min.js' %}"></script>
+<script src="{% static 'custom_admin/build/js/my_custom.js' %}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% block custom_script %}{% endblock %}
+
+</body>
+</html>

@@ -1,10 +1,21 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load jalali_tags %}
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1 style="width:80%; text-align: center; background-color: #d84c4c; color: white; padding: 20px 0; border-radius: 15px">همچنان داریم روش کار میکنیم :)</h1>
-            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1 style="width:80%; text-align: center; background-color: #d84c4c; color: white; padding: 20px 0; border-radius: 15px">
+                                همچنان داریم روش کار میکنیم :)</h1>
+                            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

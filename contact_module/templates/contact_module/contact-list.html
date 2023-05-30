@@ -1,74 +1,81 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
 {% load poll_extras %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
 
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1>ارتباطات</h1>
-        </div>
-        <div class="birthday-container">
-            {% for contact in contacts %}
-                <div class="birthday">
-                    <div class="birthday-icon">
-                        <i class="fa-brands fa-wpforms"></i>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1>ارتباطات</h1>
+                        </div>
+                        <div class="birthday-container">
+                            {% for contact in contacts %}
+                                <div class="birthday">
+                                    <div class="birthday-icon">
+                                        <i class="fa-brands fa-wpforms"></i>
+                                    </div>
+                                    <div class="birthday-title">
+                                        ارتباط {{ contact.unusual_contact_reason }} با {{ contact.agent }}
+                                    </div>
+                                    <div class="birthday-user">
+                                        {{ contact.sender.full_name }} <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <div class="birthday-date">
+                                        {{ contact.created_at|show_jalali_date|change_month }}
+                                    </div>
+                                    <button onclick="showContactMessage('{{ contact.description }}')" type="button"
+                                            data-toggle="modal"
+                                            data-target="#exampleModalCenter"
+                                            class="contact-show-btn">
+                                        مشاهده پیام کابر
+                                    </button>
+                                    {#                <span class="event-delete-icon">#}
+                                    {#                    حذف کردن#}
+                                    {#                </span>#}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="birthday-title">
-                        ارتباط {{ contact.unusual_contact_reason }} با {{ contact.agent }}
+                    <div class="article-container">
+                        <div class="article-title">
+                            <a href="{% url 'add_new_contact_report' %}" class="add-newfile-btn">گرفتن گزارش امروز</a>
+                            <h1>گزارشات ارتباط ها</h1>
+                            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                        </div>
+                        <div class="birthday-container">
+                            {% for report in reports %}
+                                <a href="{{ report.image.url }}"
+                                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
+                                    <div class="news-icon">
+                                        <img src="{{ report.image.url }}" alt="">
+                                    </div>
+                                    {#                    <div class="birthday-title">#}
+                                    {#                        {{ new.title }}#}
+                                    {#                    </div>#}
+                                    {#                    <div class="birthday-user news-user">#}
+                                    {#                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>#}
+                                    {#                    </div>#}
+                                    <div class="birthday-date">
+                                        {{ report.date.date|show_jalali_date|change_month }} - {{ report.date.time }}
+                                    </div>
+                                    {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
+                                    {#                    حذف کردن#}
+                                    {#                </a>#}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="birthday-user">
-                        {{ contact.sender.full_name }} <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="birthday-date">
-                        {{ contact.created_at|show_jalali_date|change_month }}
-                    </div>
-                    <button onclick="showContactMessage('{{ contact.description }}')" type="button" data-toggle="modal"
-                            data-target="#exampleModalCenter"
-                            class="contact-show-btn">
-                        مشاهده پیام کابر
-                    </button>
-                    {#                <span class="event-delete-icon">#}
-                    {#                    حذف کردن#}
-                    {#                </span>#}
+
                 </div>
-            {% endfor %}
+            </div>
         </div>
     </div>
-    <div class="article-container">
-        <div class="article-title">
-            <a href="{% url 'add_new_contact_report' %}" class="add-newfile-btn">گرفتن گزارش امروز</a>
-            <h1>گزارشات ارتباط ها</h1>
-            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
-        </div>
-        <div class="birthday-container">
-            {% for report in reports %}
-                <a href="{{ report.image.url }}"
-                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
-                    <div class="news-icon">
-                        <img src="{{ report.image.url }}" alt="">
-                    </div>
-                    {#                    <div class="birthday-title">#}
-                    {#                        {{ new.title }}#}
-                    {#                    </div>#}
-                    {#                    <div class="birthday-user news-user">#}
-                    {#                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>#}
-                    {#                    </div>#}
-                    <div class="birthday-date">
-                        {{ report.date.date|show_jalali_date|change_month }} - {{ report.date.time }}
-                    </div>
-                    {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
-                    {#                    حذف کردن#}
-                    {#                </a>#}
-                </a>
-            {% endfor %}
-        </div>
-    </div>
-
-
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

@@ -1,17 +1,27 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <form  method="post" class="card delete-confirm-form">
-                {% csrf_token %}
-                <h2>حذف رویداد "{{ event.title }} "</h2>
-                <p>آیا از حذف این رویداد مطمین هستید</p>
-                <p class="form-buttons">
-                    <input type="submit" class="btn btn-primary" value="تایید">
-                    <a href="{% url 'file_list_view' %}" class="btn btn-outline">لغو</a>
-                </p>
-            </form>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <form method="post" class="card delete-confirm-form">
+                                {% csrf_token %}
+                                <h2>حذف رویداد "{{ event.title }} "</h2>
+                                <p>آیا از حذف این رویداد مطمین هستید</p>
+                                <p class="form-buttons">
+                                    <input type="submit" class="btn btn-primary" value="تایید">
+                                    <a href="{% url 'file_list_view' %}" class="btn btn-outline">لغو</a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

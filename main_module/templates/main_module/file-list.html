@@ -1,13 +1,16 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
 {% load poll_extras %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
 
 {% block content %}
-    <div class="article-container">
+      <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
         <div class="article-title">
             {% if request.user.is_superuser %}
                 <a href="{% url 'file_add_view' %}" class="add-newfile-btn">افزودن فایل جدید</a>
@@ -39,6 +42,10 @@
                     {% endif %}
                 </div>
             {% endfor %}
+        </div>
+    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -1,16 +1,26 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load jalali_tags %}
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1> ویرایش کاربر {{ user.full_name }}</h1>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1> ویرایش کاربر {{ user.full_name }}</h1>
+                        </div>
+                        <form id="user-create-form" action="{% url 'user_edit_view' pk=user.id %}" method="post"
+                              enctype="multipart/form-data">
+                            {{ form }}
+                            {% csrf_token %}
+                            <button style="cursor: pointer" type="submit">ارسال</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <form id="user-create-form" action="{% url 'user_edit_view' pk=user.id %}" method="post"
-              enctype="multipart/form-data">
-            {{ form }}
-            {% csrf_token %}
-            <button style="cursor: pointer" type="submit">ارسال</button>
-        </form>
     </div>
 {% endblock %}
 

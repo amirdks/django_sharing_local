@@ -75,11 +75,13 @@ body {
     align-items: center;
     border-bottom: 1px solid lightgray;
     width: 100%;
+    opacity: .8;
 }
 
 .sidebar-items-container ul li i {
     margin-left: 30px;
     font-size: 1.2em;
+    opacity: .8;
     transition: all .3s;
 }
 
@@ -185,8 +187,10 @@ body {
 
 .active-item {
     border-bottom: 3px solid #E9A63A !important;
+    opacity: 1!important;
 }
 
 .active-item > i {
-    color: #E9A63A !important;;
+    color: #E9A63A !important;
+    opacity: 1!important;
 }

@@ -1,26 +1,32 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="article-container">
-        <h1 class="article-title">
-            جزییات خبر
-        </h1>
-        <div class="new-page-container">
-            <div class="new-page-section">
-                <img src="{{ news.image.url }}" alt="" class="new-page-image">
-            </div>
-            <div class="mew-infos-container">
-                <div class="new-author">نویسنده : {{ news.author.full_name }}</div>
-                <div class="new-date">{{ news.created_at.date | to_jalali }}</div>
-            </div>
-            <div class="new-title">{{ news.title }}</div>
-            <div class="new-description">
-                {{ news.content }}
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <h1 class="article-title">
+                            جزییات خبر
+                        </h1>
+                        <div class="new-page-container">
+                            <div class="new-page-section">
+                                <img src="{{ news.image.url }}" alt="" class="new-page-image">
+                            </div>
+                            <div class="mew-infos-container">
+                                <div class="new-author">نویسنده : {{ news.author.full_name }}</div>
+                                <div class="new-date">{{ news.created_at.date | to_jalali }}</div>
+                            </div>
+                            <div class="new-title">{{ news.title }}</div>
+                            <div class="new-description">
+                                {{ news.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,37 +1,48 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1>افزودن نظر سنجی جدید</h1>
-        </div>
-        <form id="poll-create-form" class="file-add-form" method="post" action="{% url 'poll_add_view' %}">
-            {% csrf_token %}
-            <div class="file-add-input-group">
-                <label for="">سوال نظرسنجی :</label>
-                {{ form.question }}
-            </div>
-            <div class="poll-option-container-xd">
-                <h1 class="poll-option-title">
-                    گزینه های نظر سنجی
-                </h1>
-                <div id="poll-option-section-container">
-                    <div class="poll-option-section">
-                        <span>1</span>
-                        <input type="text" class="poll-option-input">
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1>افزودن نظر سنجی جدید</h1>
+                        </div>
+                        <form id="poll-create-form" class="file-add-form" method="post"
+                              action="{% url 'poll_add_view' %}">
+                            {% csrf_token %}
+                            <div class="file-add-input-group">
+                                <label for="">سوال نظرسنجی :</label>
+                                {{ form.question }}
+                            </div>
+                            <div class="poll-option-container-xd">
+                                <h1 class="poll-option-title">
+                                    گزینه های نظر سنجی
+                                </h1>
+                                <div id="poll-option-section-container">
+                                    <div class="poll-option-section">
+                                        <span>1</span>
+                                        <input type="text" class="poll-option-input">
+                                    </div>
+                                </div>
+                                <button onclick="addOption()" type="button" class="poll-option-plus-btn">
+                                    <i class="fa-solid fa-plus"></i> اضافه کردن مورد جدید
+                                </button>
+                            </div>
+                            <button type="submit">تایید</button>
+                        </form>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
                     </div>
                 </div>
-                <button onclick="addOption()" type="button" class="poll-option-plus-btn">
-                    <i class="fa-solid fa-plus"></i> اضافه کردن مورد جدید
-                </button>
             </div>
-            <button type="submit">تایید</button>
-        </form>
-        {% for field in form %}
-            {% for error in field.errors %}
-                <p>{{ error }}</p>
-            {% endfor %}
-        {% endfor %}
+        </div>
     </div>
 {% endblock %}
 {% block custom_script %}

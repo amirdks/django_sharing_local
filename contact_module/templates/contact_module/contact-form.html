@@ -1,29 +1,39 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1>فرم ارتباط به اپراتور</h1>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1>فرم ارتباط به اپراتور</h1>
+                        </div>
+                        <form class="file-add-form" method="post" action="{% url 'contact_view' %}">
+                            {% csrf_token %}
+                            <div class="file-add-input-group">
+                                <label for="">نام اجنت پاسخگو :</label>
+                                {{ form.agent }}
+                            </div>
+                            <div class="file-add-input-group">
+                                <label for=""> شماره تلفن همراه : </label>
+                                {{ form.phone_number }}
+                            </div>
+                            <div class="file-add-input-group">
+                                <label for=""> دلیل تماس غیرمتعارف : </label>
+                                {{ form.unusual_contact_reason }}
+                            </div>
+                            <div class="file-add-input-group">
+                                <label for=""> متن پیام : </label>
+                                {{ form.description }}
+                            </div>
+                            <button type="submit">تایید</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <form class="file-add-form" method="post" action="{% url 'contact_view' %}">
-            {% csrf_token %}
-            <div class="file-add-input-group">
-                <label for="">نام اجنت پاسخگو :</label>
-                {{ form.agent }}
-            </div>
-            <div class="file-add-input-group">
-                <label for=""> شماره تلفن همراه : </label>
-                {{ form.phone_number }}
-            </div>
-            <div class="file-add-input-group">
-                <label for=""> دلیل تماس غیرمتعارف : </label>
-                {{ form.unusual_contact_reason }}
-            </div>
-                <div class="file-add-input-group">
-                <label for=""> متن پیام : </label>
-                {{ form.description }}
-            </div>
-            <button type="submit">تایید</button>
-        </form>
     </div>
 {% endblock %}

@@ -1,37 +1,44 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
 {% load poll_extras %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1>تولد ها</h1>
-        </div>
-        <div class="birthday-container">
-            {% for birthday in birthdays %}
-                <div class="birthday">
-                    <div class="birthday-icon">
-                        <i class="fa-solid fa-cake-candles"></i>
+
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1>تولد ها</h1>
+                        </div>
+                        <div class="birthday-container">
+                            {% for birthday in birthdays %}
+                                <div class="birthday">
+                                    <div class="birthday-icon">
+                                        <i class="fa-solid fa-cake-candles"></i>
+                                    </div>
+                                    <div class="birthday-title">
+                                        تولد {{ birthday.full_name }}
+                                    </div>
+                                    <div class="birthday-user">
+                                        {{ birthday.full_name }} <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <div class="birthday-date">
+                                        {{ birthday.birthday_date|show_jalali_date|change_month }}
+                                        <p>روزهای باقی مانده : {{ birthday.get_reaming_days }}</p>
+                                    </div>
+                                    {#                <span class="event-delete-icon">#}
+                                    {#                    حذف کردن#}
+                                    {#                </span>#}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="birthday-title">
-                        تولد {{ birthday.full_name }}
-                    </div>
-                    <div class="birthday-user">
-                        {{ birthday.full_name }} <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="birthday-date">
-                        {{ birthday.birthday_date|show_jalali_date|change_month }}
-                        <p>روزهای باقی مانده : {{ birthday.get_reaming_days }}</p>
-                    </div>
-{#                <span class="event-delete-icon">#}
-{#                    حذف کردن#}
-{#                </span>#}
                 </div>
-            {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

@@ -1,31 +1,46 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load poll_extras %}
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <h1>گزارشات ورود کارکنان</h1>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <h1>گزارشات ورود کارکنان</h1>
+                        </div>
+
+
+                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap"
+                               cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">نام و نام خانوادگی</th>
+                                <th scope="col">ایمیل</th>
+                                <th scope="col">تاریخ ورود</th>
+                                <th scope="col">ساعت ورود</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for login in logins %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{ login.user.full_name }}</td>
+                                    <td>{{ login.user.email }}</td>
+                                    <td>{{ login.created_at.date | show_jalali_date | change_month }}</td>
+                                    <td>{{ login.created_at | time }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <table class="table report-table">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">نام و نام خانوادگی</th>
-                <th scope="col">ایمیل</th>
-                <th scope="col">تاریخ ورود</th>
-                <th scope="col">ساعت ورود</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for login in logins %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ login.user.full_name }}</td>
-                    <td>{{ login.user.email }}</td>
-                    <td>{{ login.created_at.date | show_jalali_date | change_month }}</td>
-                    <td>{{ login.created_at | time }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
     </div>
 {% endblock %}

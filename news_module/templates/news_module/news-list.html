@@ -1,38 +1,50 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
-
+{% load poll_extras %}
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            <a href="{% url 'news_add_view' %}" class="add-newfile-btn">افزودن خبر جدید</a>
-            <h1>خبر ها</h1>
-            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
-        </div>
-        <div class="birthday-container">
-            {% for new in news %}
-                <a href="{% url 'news_detail_view' new.pk %}"
-                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
-                    <div class="news-icon">
-                        <img src="{{ new.image.url }}" alt="">
+
+
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            <a href="{% url 'news_add_view' %}" class="add-newfile-btn">افزودن خبر جدید</a>
+                            <h1>خبر ها</h1>
+                            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                        </div>
+                        <div class="birthday-container">
+                            {% for new in news %}
+                                <a href="{% url 'news_detail_view' new.pk %}"
+                                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
+                                    <div class="news-icon">
+                                        <img src="{{ new.image.url }}" alt="">
+                                    </div>
+                                    <div class="birthday-title">
+                                        {{ new.title }}
+                                    </div>
+                                    <div class="birthday-user news-user">
+                                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <div class="birthday-date">
+                                        {{ new.created_at.date | show_jalali_date | change_month }} - {{ new.created_at.time }}
+                                    </div>
+                                    {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
+                                    {#                    حذف کردن#}
+                                    {#                </a>#}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="birthday-title">
-                        {{ new.title }}
-                    </div>
-                    <div class="birthday-user news-user">
-                        {{ new.author.full_name }} <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="birthday-date">
-                        {{ new.created_at|to_jalali }}
-                    </div>
-{#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
-{#                    حذف کردن#}
-{#                </a>#}
-                </a>
-            {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
+
+
+
 {% endblock %}

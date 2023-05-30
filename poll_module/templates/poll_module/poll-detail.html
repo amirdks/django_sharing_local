@@ -1,50 +1,60 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
 {% load poll_extras %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
-
 {% block content %}
-    <form delete-url="{% url 'delete_vote_view' %}" action="{% url 'poll_detail_view' pk=poll.id %}" id="form">
-        {% csrf_token %}
-    </form>
-    <div class="article-container">
-        <h1 class="article-title">
-            جزییات نظرسنجی
-        </h1>
-        <div class="poll-detail-container">
-            <div class="poll-detail-title">
-                {{ poll.question }}
-            </div>
-            <div style="border: none!important;" class="mew-infos-container">
-                <div class="new-author">نویسنده : {{ poll.owner.full_name }}</div>
-                <div class="new-author">تعداد رای های ثبت شده : {{ poll.all_count }}</div>
-                <div class="new-date">{{ poll.created_at.date |show_jalali_date|change_month }}</div>
-            </div>
-            <div class="poll-option-container">
-                {% for option in poll.poll_option.all %}
-                    <div class="poll-option">
-                        <div class="poll-option-number">
-                            {{ forloop.counter }}
-                        </div>
-                        <div class="poll-option-title">
-                            {{ option.option }}
-                        </div>
-                        <div class="poll-option-count">
-                            {{ option.option_count_x }}
-                        </div>
-                        <div class="poll-option-btn">
-                            <button onclick="vote({{ option.id }})" class="submit-vote-btn">رای دادن</button>
-                            {% if user_vote and  user_vote.poll_option.id == option.id %}
-                                <button onclick="deleteVote({{ user_vote.id }})" class="delete-cote-btn">حذف رای
-                                </button>
-                            {% endif %}
+
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <form delete-url="{% url 'delete_vote_view' %}" action="{% url 'poll_detail_view' pk=poll.id %}"
+                          id="form">
+                        {% csrf_token %}
+                    </form>
+                    <div class="article-container">
+                        <h1 class="article-title">
+                            جزییات نظرسنجی
+                        </h1>
+                        <div class="poll-detail-container">
+                            <div class="poll-detail-title">
+                                {{ poll.question }}
+                            </div>
+                            <div style="border: none!important;" class="mew-infos-container">
+                                <div class="new-author">نویسنده : {{ poll.owner.full_name }}</div>
+                                <div class="new-author">تعداد رای های ثبت شده : {{ poll.all_count }}</div>
+                                <div class="new-date">{{ poll.created_at.date |show_jalali_date|change_month }}</div>
+                            </div>
+                            <div class="poll-option-container">
+                                {% for option in poll.poll_option.all %}
+                                    <div class="poll-option">
+                                        <div class="poll-option-number">
+                                            {{ forloop.counter }}
+                                        </div>
+                                        <div class="poll-option-title">
+                                            {{ option.option }}
+                                        </div>
+                                        <div class="poll-option-count">
+                                            {{ option.option_count_x }}
+                                        </div>
+                                        <div class="poll-option-btn">
+                                            <button onclick="vote({{ option.id }})" class="submit-vote-btn">رای دادن
+                                            </button>
+                                            {% if user_vote and  user_vote.poll_option.id == option.id %}
+                                                <button onclick="deleteVote({{ user_vote.id }})"
+                                                        class="delete-cote-btn">حذف رای
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
                         </div>
                     </div>
-                {% endfor %}
-
+                </div>
             </div>
         </div>
     </div>
@@ -55,7 +65,6 @@
 
 
         let links = document.getElementsByClassName("submit-vote-btn")
-        console.log(links)
         let csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 
         function vote(optionId) {

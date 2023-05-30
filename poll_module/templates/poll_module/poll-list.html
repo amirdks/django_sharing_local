@@ -1,43 +1,49 @@
-{% extends 'shared/__layout.html' %}
+{% extends 'shared/admin_layout.html' %}
 {% load static %}
 {% load jalali_tags %}
 {% load poll_extras %}
-{% block custom_header %}
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
-
 {% block content %}
-    <div class="article-container">
-        <div class="article-title">
-            {% if request.user.is_superuser %}
-                <a href="{% url 'poll_add_view' %}" class="add-newfile-btn">افزودن نظرسنجی جدید</a>
-            {% endif %}
-            <h1>نظرسنجی ها</h1>
-            {% if request.user.is_superuser %}
-                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
-            {% endif %}
-        </div>
-        <div class="birthday-container">
-            {% for poll in polls %}
-                <a href="{% url 'poll_detail_view' poll.pk %}"
-                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
-                    <div class="birthday-icon">
-                        <i class="fa-solid fa-square-poll-vertical"></i>
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'poll_add_view' %}" class="add-newfile-btn">افزودن نظرسنجی جدید</a>
+                            {% endif %}
+                            <h1>نظرسنجی ها</h1>
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                            {% endif %}
+                        </div>
+                        <div class="birthday-container">
+                            {% for poll in polls %}
+                                <a href="{% url 'poll_detail_view' poll.pk %}"
+                                   style="cursor: pointer; text-decoration: none; color: black" class="birthday">
+                                    <div class="birthday-icon">
+                                        <i class="fa-solid fa-square-poll-vertical"></i>
+                                    </div>
+                                    <div class="birthday-title">
+                                        {{ poll.question }}
+                                    </div>
+                                    <div class="birthday-user news-user">
+                                        {{ poll.owner.full_name }} <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    <div class="birthday-date">
+                                        {{ poll.created_at.date|show_jalali_date|change_month }}
+                                    </div>
+                                    {#                <a href="{% url 'poll_delete_view' pk=poll.id %}" class="event-delete-icon">#}
+                                    {#                    حذف کردن#}
+                                    {#                </a>#}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
-                    <div class="birthday-title">
-                        {{ poll.question }}
-                    </div>
-                    <div class="birthday-user news-user">
-                        {{ poll.owner.full_name }} <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="birthday-date">
-                        {{ poll.created_at.date|show_jalali_date|change_month }}
-                    </div>
-{#                <a href="{% url 'poll_delete_view' pk=poll.id %}" class="event-delete-icon">#}
-{#                    حذف کردن#}
-{#                </a>#}
-                </a>
-            {% endfor %}
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
