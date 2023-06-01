@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.validators import URLValidator
 from django.db import models
 from django.utils import timezone
 
@@ -44,3 +45,18 @@ class Birthday(models.Model):
 
     def reaming_date(self):
         return self.birthday_date - datetime.datetime.today().date()
+
+
+class HyperLink(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="images/hyper_link")
+    link = models.TextField(validators=[URLValidator()])
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'لینک خارجی'
+        verbose_name_plural = 'لینک های خارجی'
+
+    def __str__(self):
+        return self.title

@@ -1,6 +1,10 @@
 {% extends 'shared/admin_layout.html' %}
 {% load jalali_tags %}
+{% load poll_extras %}
 {% block content %}
+    <form id="http-request-form" action="{% url 'user_list_view' %}" method="post">
+        {% csrf_token %}
+    </form>
     <div class="">
         <div class="clearfix"></div>
         <div class="main-row-container row">
@@ -11,43 +15,14 @@
                         <div class="article-title">
                             <a href="{% url 'user_add_view' %}" class="add-newfile-btn">افزودن کاربر جدید</a>
                             <h1>لیست کاربران</h1>
-                            <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                            <div class="user-list-search-container">
+                                <input id="user-list-search-input" type="text" placeholder="جست و جو ...">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </div>
                         </div>
-                        <table class="table report-table">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">نام و نام خانوادگی</th>
-                                <th scope="col">ایمیل</th>
-                                <th scope="col">تاریخ آخرین ورود</th>
-                                <th scope="col">دسترسی ادمین</th>
-                                <th scope="col">رویداد ها</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for user in users %}
-                                <tr>
-                                    <th scope="row">{{ forloop.counter }}</th>
-                                    <td>{{ user.full_name }}</td>
-                                    <td>{{ user.email }}</td>
-                                    <td>{{ user.last_login | to_jalali }}</td>
-                                    <td class="table-is-superuser">{% if user.is_superuser %}
-                                        <i class="fa-solid fa-circle-check"></i>
-                                    {% else %}
-                                        <i class="fa-solid fa-circle-xmark"></i>
-                                    {% endif %} </td>
-                                    <td>
-                                        {% if not user.is_superuser %}
-                                            <a href="{% url 'user_edit_view' pk=user.id %}"
-                                               class="user-action-btn edit-user-btn">ویرایش</a>
-                                            <a onclick="deleteUser({{ user.id }})"
-                                               class="user-action-btn delete-user-btn">حذف</a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                        <div id="user-list-table-container">
+                            {% include 'account_module/includes/user-list-component.html' with users=users %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,5 +65,28 @@
                 }
             })
         }
+
+        let httpForm = document.getElementById("http-request-form")
+        let searchInput = document.getElementById("user-list-search-input")
+        searchInput.addEventListener("input", event => {
+            let formData = new FormData(httpForm)
+            formData.append("search_text", event.target.value)
+            $.ajax({
+                url: httpForm.getAttribute("action"),
+                type: httpForm.getAttribute("method"),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success(res) {
+                    if (res.status === "success") {
+                        $('#user-list-table-container').fadeOut(500, function () {
+                            $('#user-list-table-container').html(res.message).fadeIn(500)
+                        })
+                    } else {
+                        showNotification(res, "شکست")
+                    }
+                }
+            })
+        })
     </script>
 {% endblock %}

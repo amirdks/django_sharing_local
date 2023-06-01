@@ -31,7 +31,7 @@
                                         {{ new.author.full_name }} <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div class="birthday-date">
-                                        {{ new.created_at.date | show_jalali_date | change_month }} - {{ new.created_at.time }}
+                                        {{ new.created_at.date | show_jalali_date | change_month }} - {{ new.created_at.time | time:"H:i" }}
                                     </div>
                                     {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
                                     {#                    حذف کردن#}

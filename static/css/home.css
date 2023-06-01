@@ -315,6 +315,37 @@
     cursor: pointer;
 }
 
+.errorlist li {
+    color: #f15b5b;
+    padding-bottom: 10px;
+}
+
+.form-error-container {
+    text-align: center;
+    width: 50%;
+    color: white;
+    background-color: #f15b5b;
+    margin: 15px auto;
+    padding: 10px 0;
+    border-radius: 10px;
+}
+
+
+.user-list-search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid lightgray;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.user-list-search-container input {
+    background-color: inherit;
+    border: none;
+    outline: none;
+}
+
 .edit-user-btn {
     background-color: #686cba;
     color: white !important;
@@ -434,4 +465,32 @@
 
 .main-row-container {
     min-height: 100vh !important;
+}
+
+.hyper-link-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+.hyper-link-item a{
+    text-decoration: none;
+    display: block;
+    height: 50px!important;
+    width: 100%;
+}
+.hyper-link-item:hover a{
+    background-color: inherit!important;
+}
+.hyper-link-item a img{
+    width: 100%;
+    border-radius: 50%;
+    transition: all .2s!important;
+    height: 50px;
+}
+.hyper-link-item:hover{
+    background-color: inherit!important;
+}
+.hyper-link-item:hover a img{
+    transform: scale(1.07);
 }

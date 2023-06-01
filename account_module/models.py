@@ -51,8 +51,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     full_name = models.CharField(max_length=255)
     email = models.EmailField(max_length=255, unique=True)
-    national_code = models.CharField(max_length=10, null=True, unique=True, validators=[is_valid_iran_code])
+    national_code = models.CharField(max_length=10, unique=True, validators=[is_valid_iran_code])
     birthday_date = models.DateField(null=True, blank=True)
+    recruitment_date = models.DateField()
+    leaving_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True, upload_to="images/avatar")
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)

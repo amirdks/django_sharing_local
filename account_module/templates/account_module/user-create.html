@@ -1,5 +1,6 @@
 {% extends 'shared/admin_layout.html' %}
 {% load jalali_tags %}
+{% load static %}
 {% block content %}
     <div class="">
         <div class="clearfix"></div>
@@ -17,6 +18,15 @@
                             {% csrf_token %}
                             <button style="cursor: pointer" type="submit">ارسال</button>
                         </form>
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <div class="form-error-container">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -26,15 +36,5 @@
 {% endblock %}
 
 {% block custom_script %}
-    <script>
-        let input = document.getElementById("datetime")
-        input.addEventListener("focus", (event) => {
-            var dp = new HaDateTimePicker("#datetime", {
-                isSolar: true,
-                {#forceSetTime: true,#}
-                resultFormat: '{year}-{month}-{day}',
-            });
-            dp.show();
-        })
-    </script>
+    <script src="{% static 'script.js' %}"></script>
 {% endblock %}

@@ -1,8 +1,10 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.views import View
 
@@ -89,6 +91,17 @@ class UserListView(JustSuperUser, View):
         }
         return render(request, 'account_module/user-list.html', context)
 
+    def post(self, request):
+        search_text = request.POST.get("search_text")
+        context = {
+            'users': User.objects.filter(
+                Q(full_name__contains=search_text) | Q(national_code__contains=search_text) | Q(
+                    email__contains=search_text)).exclude(id=request.user.id).order_by("-is_superuser")
+        }
+        user_list_component = render_to_string("account_module/includes/user-list-component.html", context,
+                                               request=request)
+        return JsonResponse({"status": "success", "message": user_list_component})
+
 
 class UserCreateView(JustSuperUser, View):
     def get(self, request):
@@ -104,9 +117,9 @@ class UserCreateView(JustSuperUser, View):
             email = form.cleaned_data.pop("email")
             password = form.cleaned_data.pop("password")
             is_superuser = form.cleaned_data.get("is_superuser")
+            print(form.cleaned_data.get("national_code"))
             try:
                 if is_superuser:
-
                     new_user = User.objects.create_superuser(email, password, **form.cleaned_data)
                 else:
                     new_user = User.objects.create_user(email, password, **form.cleaned_data)
@@ -137,13 +150,6 @@ class UserDeleteView(JustSuperUser, View):
 class UserEditView(JustSuperUser, View):
     def get(self, request, pk):
         user: User = get_object_or_404(User, pk=pk, is_superuser=False)
-        # user_init = {
-        #     "full_name": user.full_name,
-        #     "email": user.email,
-        #     "national_code": user.national_code,
-        #     "avatar": user.avatar,
-        #     "birthday_date": user.birthday_date,
-        # }
         form = UserEditForm(instance=user)
         context = {
             "user": user,
@@ -165,6 +171,6 @@ class UserEditView(JustSuperUser, View):
         return render(request, "account_module/user-edit.html", context)
 
 
-class CallLogView(JustSuperUser,View):
+class CallLogView(JustSuperUser, View):
     def get(self, request):
         return render(request, "account_module/call-log.html")

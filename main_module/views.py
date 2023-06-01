@@ -9,7 +9,7 @@ from django.views.generic import ListView, DetailView, TemplateView, CreateView,
 from account_module.mixins import JustSuperUser
 from account_module.models import UserLoggedIn, UserLoggedOut, User
 from main_module.forms import FileAddForm, EventAddForm, BirthdayCreateForm
-from main_module.models import File, Event, Birthday
+from main_module.models import File, Event, Birthday, HyperLink
 from news_module.models import News
 
 
@@ -171,3 +171,11 @@ class FileDeleteView(JustSuperUser, DeleteView):
     model = File
     context_object_name = 'file'
     success_url = reverse_lazy('file_list_view')
+
+
+def custom_admin_navbar_component(request):
+    hyper_links = HyperLink.objects.filter(is_active=True)
+    context = {
+        "hyper_links": hyper_links
+    }
+    return render(request, "shared/includes/custom_admin_navbar.html", context)

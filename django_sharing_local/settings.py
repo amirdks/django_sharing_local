@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_beat',
     'sorl.thumbnail',
+    'django_render_partial',
     'account_module',
     'poll_module',
     'news_module',

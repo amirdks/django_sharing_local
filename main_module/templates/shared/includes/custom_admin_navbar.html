@@ -1,0 +1,43 @@
+{% load static %}
+<div class="top_nav hidden-print">
+    <div class="nav_menu">
+        <nav>
+            <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+                        {% if request.user.profile.image %}
+                            <img src="{{ request.user.profile.image.url }}" alt="">
+                        {% else %}
+                            <img src="{% static 'custom_admin/build/images/img.jpg' %}" alt="">
+                        {% endif %}
+                        {{ request.user.profile.get_full_name_res }}
+                        <span class=" fa fa-angle-down"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-usermenu pull-right">
+                        <li><a href="javascript:;"> نمایه</a></li>
+                        <li>
+                            <a href="javascript:;">
+                                <span class="badge bg-red pull-right">50%</span>
+                                <span>تنظیمات</span>
+                            </a>
+                        </li>
+                        <li><a href="javascript:;">کمک</a></li>
+                        <li><a href="{% url 'logout_view' %}"><i class="fa fa-sign-out pull-right"></i> خروج</a>
+                        </li>
+                    </ul>
+                </li>
+                {% for hyper_link in hyper_links %}
+                    <li class="hyper-link-item">
+                        <a title="{{ hyper_link.title }}" href="{{ hyper_link.link }}">
+                            <img src="{{ hyper_link.image.url }}" alt="{{ hyper_link.title }}">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
