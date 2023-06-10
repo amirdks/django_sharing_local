@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'polls',
     'jalali_date',
     'contact_module',
+    'gallery_module',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,49 @@
+
+
+{% extends 'shared/admin_layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'gallery_add_image' category_id=gallery_category.id %}"
+                                   class="add-newfile-btn">افزودن تصویر جدید</a>
+                            {% endif %}
+                            <h1>اضافه دسته بندی گالری</h1>
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'gallery_add_video' category_id=gallery_category.id %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                            {% endif %}
+                        </div>
+                        <div class="events-container">
+                            <form style="width: 80%;margin: 0 auto" class="file-add-form" method="post"
+                                  action="{% url 'gallery_add_video' category_id=gallery_category.id %}"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {#                                <div class="file-add-input-group">#}
+                                {#                                    <label for=""> توضیحات دسته بندی : </label>#}
+                                {#                                    {{ form.category }}#}
+                                {#                                </div>#}
+                                <div class="file-add-input-group">
+                                    <label for="">عنوان ویدیو :</label>
+                                    {{ form.title }}
+                                </div>
+                                <div class="file-add-input-group">
+                                    <label for=""> ویدیو : </label>
+                                    {{ form.video }}
+                                </div>
+
+                                <button type="submit">تایید</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

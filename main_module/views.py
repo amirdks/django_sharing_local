@@ -1,5 +1,6 @@
 import datetime
 
+import pytz
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
@@ -18,8 +19,11 @@ class HomeView(LoginRequiredMixin, View):
     def get(self, request):
         files = File.objects.all()[:8]
         news = News.objects.all()[:8]
-        birthdays = User.objects.all().order_by("birthday_date")
-        events = Event.objects.all()[:8]
+        birthdays = []
+        for user in User.objects.all():
+            if user.is_today_birthday:
+                birthdays.append(user)
+        events = Event.objects.filter(event_date__exact=datetime.datetime.now(tz=pytz.timezone("Asia/Tehran")))
         context = {
             "files": files,
             "news": news,
@@ -179,3 +183,11 @@ def custom_admin_navbar_component(request):
         "hyper_links": hyper_links
     }
     return render(request, "shared/includes/custom_admin_navbar.html", context)
+
+
+def news_footnote(request):
+    last_news = News.objects.all()[:15]
+    context = {
+        'last_news': last_news
+    }
+    return render(request, 'shared/includes/news_footnote.html', context)

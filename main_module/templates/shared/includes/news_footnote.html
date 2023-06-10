@@ -1,0 +1,8 @@
+<div class="footnote-container">
+    <marquee behavior="scroll" direction="rtl">
+        <span>جدید ترین اخبار : </span>{% for last_new in last_news %}
+        <a href="{% url 'news_detail_view' pk=last_new.id %}">{{ last_new.title }}</a>,
+        {% endfor %}
+
+    </marquee>
+</div>

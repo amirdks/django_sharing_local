@@ -1,0 +1,60 @@
+{% extends 'shared/admin_layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'gallery_add_image' category_id=gallery_category.id %}" class="add-newfile-btn">افزودن تصویر جدید</a>
+                            {% endif %}
+                            <h1>عکس ها و ویدیو های {{ gallery_category.title }}</h1>
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'gallery_add_video' category_id=gallery_category.id %}" class="go-to-home-page-btn">افزودن ویدیو جدید</a>
+                            {% endif %}
+                        </div>
+                        <div class="gallery_category_description">
+                            {{ gallery_category.description }}
+                        </div>
+                        <div class="events-container">
+                            {% for gallery_image in gallery_category.galleryimage_set.all %}
+                                <a href="{{ gallery_image.image.url }}"
+                                   class="gallery-category-item">
+                                    {% if gallery_image.image %}
+                                        <img src="{{ gallery_image.image.url }}" alt="">
+                                    {% else %}
+                                        <img src="{% static 'images/empty.jpg' %}" alt="">
+                                    {% endif %}
+                                    <p class="gallery-category-title">
+                                        {{ gallery_image.title }}
+                                    </p>
+                                </a>
+                            {% endfor %}
+                            {% for gallery_video in gallery_category.galleryvideo_set.all %}
+                                <div href="{{ gallery_video.video.url }}"
+                                   class="gallery-category-item">
+                                    {% if gallery_video.video %}
+                                        <video src="{{ gallery_video.video.url }}" controls>
+                                            <source
+                                                    src="{{ gallery_video.video.url }}"
+                                                    type="video/mp4"/>
+                                        </video>
+                                    {% else %}
+                                        <img src="{% static 'images/empty.jpg' %}" alt="">
+                                    {% endif %}
+                                    <p class="gallery-category-title">
+                                        {{ gallery_video.title }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

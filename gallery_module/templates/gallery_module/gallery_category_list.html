@@ -1,0 +1,39 @@
+{% extends 'shared/admin_layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'event_add_view' %}" class="add-newfile-btn">افزودن دسته بندی جدید</a>
+                            {% endif %}
+                            <h1>دسته بندی گالری رسانه ها</h1>
+                            {% if request.user.is_superuser %}
+                                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
+                            {% endif %}
+                        </div>
+                        <div class="events-container">
+                            {% for gallerycategory in gallerycategories %}
+                                <a href="{% url 'gallery_list_view' category_id=gallerycategory.id %}" class="box-shadow-3d gallery-category-item">
+                                    {% if gallerycategory.galleryimage_set.first.image %}
+                                        <img src="{{ gallerycategory.galleryimage_set.first.image.url }}" alt="">
+                                    {% else %}
+                                        <img src="{% static 'images/empty.jpg' %}" alt="">
+                                    {% endif %}
+                                    <p class="gallery-category-title">
+                                        {{ gallerycategory.title }}
+                                    </p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

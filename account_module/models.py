@@ -86,6 +86,17 @@ class User(AbstractBaseUser, PermissionsMixin):
             return "هنوز ست نشده"
 
     @property
+    def is_today_birthday(self):
+        if self.birthday_date:
+            res = self.birthday_date.replace(year=timezone.now().date().year) - timezone.now().date()
+            if res.days == 0:
+                return True
+            else:
+                return False
+        else:
+            return False
+
+    @property
     def reaming_date(self):
         return self.birthday_date - timezone.now().date()
 

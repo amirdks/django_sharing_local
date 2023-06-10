@@ -95,7 +95,7 @@ class UserEditForm(forms.ModelForm):
             "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "ایمیل ..."}),
             "password": forms.PasswordInput(attrs={"class": "form-control", "placeholder": "رمزعبور ..."}),
             "birthday_date": forms.TextInput(
-                attrs={'class': 'form-control', 'id': 'datetime', 'data-ha-datetimepicker': '#datetime'}),
+                attrs={'class': 'form-control date-picker-input', 'id': 'datetime', 'data-ha-datetimepicker': '#datetime'}),
             "recruitment_date": forms.TextInput(
                 attrs={'class': 'form-control date-picker-input', 'id': 'recruitment_date',
                        'data-ha-datetimepicker': '#recruitment_date'}),

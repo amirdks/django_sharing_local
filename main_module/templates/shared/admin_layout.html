@@ -95,14 +95,25 @@
                                     <li><a href="{% url 'news_list_view' %}">اخبار</a></li>
                                 </ul>
                             </li>
-                            <li><a><i class="fa-solid fa-users"></i> کارمندان <span
+                            {% if request.user.is_superuser %}
+                                <li><a><i class="fa-solid fa-users"></i> کارمندان <span
+                                        class="fa fa-chevron-down"></span></a>
+                                    <ul class="nav child_menu">
+                                        <li><a href="{% url 'user_list_view' %}">لیست کارمندان</a></li>
+                                        <li><a href="{% url 'login_report_view' %}">گزارشات ورود کارمندان</a></li>
+                                        <li><a href="{% url 'logout_report_view' %}">گزارشات خروج کارمندان</a></li>
+                                        <li><a href="{% url 'call_log_view' %}">گزارشات تماس</a></li>
+                                        <li><a href="{% url 'contact_list_view' %}">لیست ارتباطات</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            <li><a><i class="fa-solid fa-image"></i> گالری تصاویر <span
                                     class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{% url 'user_list_view' %}">لیست کارمندان</a></li>
-                                    <li><a href="{% url 'login_report_view' %}">گزارشات ورود کارمندان</a></li>
-                                    <li><a href="{% url 'logout_report_view' %}">گزارشات خروج کارمندان</a></li>
-                                    <li><a href="{% url 'call_log_view' %}">گزارشات تماس</a></li>
-                                    <li><a href="{% url 'contact_list_view' %}">لیست ارتباطات</a></li>
+                                    <li><a href="{% url 'user_list_view' %}">دسته بندی گالری</a></li>
+                                    {% if request.user.is_superuser %}
+                                        <li><a href="{% url 'user_list_view' %}">افزودن دسته بندی گالری</a></li>
+                                    {% endif %}
                                 </ul>
                             </li>
                         </ul>
@@ -126,6 +137,7 @@
             {% block content %}{% endblock %}
         </div>
 
+        {% render_partial 'main_module.views.news_footnote' %}
 
         <!-- footer content -->
         <!-- /footer content -->

@@ -18,6 +18,14 @@ function showNotification(res, status) {
     });
 }
 
+$(function () {
+    $('marquee').mouseover(function () {
+        $(this).attr('scrollamount', 0);
+    }).mouseout(function () {
+        $(this).attr('scrollamount', 5);
+    });
+});
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
