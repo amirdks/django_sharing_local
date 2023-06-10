@@ -179,8 +179,17 @@ class FileDeleteView(JustSuperUser, DeleteView):
 
 def custom_admin_navbar_component(request):
     hyper_links = HyperLink.objects.filter(is_active=True)
+    birthdays = []
+    for user in User.objects.all():
+        if user.is_today_birthday:
+            birthdays.append(user)
+    events = Event.objects.filter(event_date__exact=datetime.datetime.now(tz=pytz.timezone("Asia/Tehran")))
+    number = events.count() + len(birthdays)
     context = {
-        "hyper_links": hyper_links
+        "hyper_links": hyper_links,
+        'birthdays': birthdays,
+        'events': events,
+        'number': number,
     }
     return render(request, "shared/includes/custom_admin_navbar.html", context)
 

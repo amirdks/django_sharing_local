@@ -7,9 +7,11 @@
         <th scope="col">نام و نام خانوادگی</th>
         <th scope="col">ایمیل</th>
         <th scope="col">کدملی</th>
+        <th scope="col">بخش اداری</th>
         <th scope="col">تاریخ آخرین ورود</th>
         <th scope="col">تاریخ استخدام</th>
         <th scope="col">تاریخ خروج از شرکت</th>
+        <th scope="col">رئیس بخش</th>
         <th scope="col">دسترسی ادمین</th>
         <th scope="col">رویداد ها</th>
     </tr>
@@ -21,6 +23,7 @@
             <td>{{ user.full_name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.national_code }}</td>
+            <td>{{ user.administrative_department | dont_show_none }}</td>
             <td>{{ user.last_login | to_jalali }}</td>
             <td>{{ user.recruitment_date | show_jalali_date | change_month }}</td>
             <td>
@@ -30,11 +33,20 @@
                     <span style="color: #51c551">کارمند شرکت</span>
                 {% endif %}
             </td>
-            <td class="table-is-superuser">{% if user.is_superuser %}
-                <i class="fa-solid fa-circle-check"></i>
-            {% else %}
-                <i class="fa-solid fa-circle-xmark"></i>
-            {% endif %} </td>
+            <td class="table-is-superuser">
+                {% if user.is_head_department %}
+                    <i class="fa-solid fa-circle-check"></i>
+                {% else %}
+                    <i class="fa-solid fa-circle-xmark"></i>
+                {% endif %}
+            </td>
+            <td class="table-is-superuser">
+                {% if user.is_superuser %}
+                    <i class="fa-solid fa-circle-check"></i>
+                {% else %}
+                    <i class="fa-solid fa-circle-xmark"></i>
+                {% endif %}
+            </td>
             <td>
                 {% if not user.is_superuser %}
                     <a href="{% url 'user_edit_view' pk=user.id %}"

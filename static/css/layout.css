@@ -214,11 +214,12 @@ body {
     border-radius: 15px;
     transition: all .3s linear;
 }
-.gallery-category-item:hover{
+
+.gallery-category-item:hover {
     transform: scale(0.98);
 }
 
-.gallery-category-item img,video {
+.gallery-category-item img, video {
     width: 100%;
     object-fit: cover;
     border-radius: 15px;
@@ -232,9 +233,58 @@ body {
     margin-bottom: 20px;
     color: black;
 }
-.gallery_category_description{
+
+.gallery_category_description {
     text-align: center;
     margin: 20px 0;
     font-size: 1.1rem;
     font-weight: bold;
+}
+
+.custom-left-navbar {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.notif-element {
+    /*color: #d83f3f;*/
+
+}
+
+.notif-element a .fa-solid.fa-bell {
+    position: relative;
+    font-size: 1.6rem;
+}
+
+.notif-element a .fa-solid.fa-bell span {
+    position: absolute;
+    right: -4px;
+    top: -6px;
+    background-color: #d83f3f;
+    color: #fff;
+    border-radius: 50%;
+    font-size: .6rem;
+    padding: 4px;
+}
+
+.notif-element-inner li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notif-element-inner li a span {
+    font-size: .9rem !important;
+}
+
+.notif-element-inner li a .fa-cake-candles{
+    color: #ff738b;
+}
+.notif-element-inner li a .fa-calendar-check{
+    color: #549d6a;
+}
+.notif-element-inner li a i, svg {
+    font-size: 1rem;
 }

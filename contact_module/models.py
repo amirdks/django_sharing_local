@@ -16,6 +16,8 @@ class Contact(models.Model):
     # agent = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=13)
     unusual_contact_reason = models.ForeignKey('UnusualContactReason', on_delete=models.CASCADE)
+    head_administrative_department = models.ForeignKey("account_module.AdministrativeDepartment",
+                                                       on_delete=models.SET_NULL, null=True, blank=True)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
 

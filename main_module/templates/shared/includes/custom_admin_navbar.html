@@ -38,6 +38,40 @@
                     </li>
                 {% endfor %}
             </ul>
+            <ul class="nav navbar-nav navbar-left custom-left-navbar">
+                <li class="notif-element">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
+                       aria-expanded="false">
+                        <i class="fa-solid fa-bell">
+                            {% if number %}
+                                <span>{{ number }}</span>
+                            {% endif %}
+                        </i>
+                    </a>
+                    {% if number %}
+                        <ul class="dropdown-menu dropdown-usermenu pull-right notif-element-inner">
+                            {% for birthday in birthdays %}
+                                <li>
+                                    <a href="/#today-birthdays">
+                                        <span>تولد {{ birthday.full_name }}</span> <i
+                                            class="fa-solid fa-cake-candles"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+                            {% for event in events %}
+                                <li>
+                                    <a href="/#today-birthdays">
+                                        <span>روز رویداد {{ event.title }}</span> <i
+                                            class="fa-regular fa-calendar-check"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+
+                        </ul>
+                    {% endif %}
+                </li>
+            </ul>
         </nav>
     </div>
 </div>

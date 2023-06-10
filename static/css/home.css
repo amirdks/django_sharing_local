@@ -280,6 +280,12 @@
     border-radius: 10px;
     outline: none;
     width: 30% !important;
+    display: block;
+}
+.file-add-input-group .input-help-text{
+    display: block;
+    width: 70%;
+    margin-top: 15px;
 }
 
 .file-add-form button {

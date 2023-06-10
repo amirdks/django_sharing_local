@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from account_module.models import User
+from account_module.models import User, AdministrativeDepartment
 from account_module.validation import is_valid_iran_code
 
 
@@ -60,6 +60,19 @@ class UserCreateForm(forms.Form):
                'data-ha-datetimepicker': '#leaving_date'}),
         help_text='فقط درصورت نیاز پر شود', label="تاریخ خروج از شرکت", required=False)
 
+    administrative_department = forms.ModelChoiceField(
+        queryset=AdministrativeDepartment.objects.all(),
+        label="بخش اداری",
+        required=True,
+        widget=forms.Select(attrs={"class": "form-control"})
+    )
+
+    is_head_department = forms.BooleanField(
+        label='سرپرست بخش',
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        required=False
+    )
+
     is_superuser = forms.BooleanField(
         label='دسترسی ادمین',
         widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
@@ -88,14 +101,15 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["full_name", "national_code", "email", "password", "birthday_date", "recruitment_date",
-                  "leaving_date", "avatar"]
+                  "leaving_date", "administrative_department", "is_head_department", "is_superuser", "avatar"]
         widgets = {
             "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "نام و نام خانوادگی ..."}),
             "national_code": forms.TextInput(attrs={"class": "form-control", "placeholder": "کد ملی ..."}),
             "email": forms.EmailInput(attrs={"class": "form-control", "placeholder": "ایمیل ..."}),
             "password": forms.PasswordInput(attrs={"class": "form-control", "placeholder": "رمزعبور ..."}),
             "birthday_date": forms.TextInput(
-                attrs={'class': 'form-control date-picker-input', 'id': 'datetime', 'data-ha-datetimepicker': '#datetime'}),
+                attrs={'class': 'form-control date-picker-input', 'id': 'datetime',
+                       'data-ha-datetimepicker': '#datetime'}),
             "recruitment_date": forms.TextInput(
                 attrs={'class': 'form-control date-picker-input', 'id': 'recruitment_date',
                        'data-ha-datetimepicker': '#recruitment_date'}),
@@ -103,6 +117,9 @@ class UserEditForm(forms.ModelForm):
                 attrs={'class': 'form-control date-picker-input', 'id': 'leaving_date',
                        'data-ha-datetimepicker': '#leaving_date'}),
             "avatar": forms.ClearableFileInput(),
+            "administrative_department": forms.Select(attrs={"class": "form-control"}),
+            "is_head_department": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "is_superuser": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
         labels = {
             "full_name": "نام و نام خانوادگی",
@@ -113,6 +130,9 @@ class UserEditForm(forms.ModelForm):
             "recruitment_date": "تاریخ استخدام کارمند",
             "leaving_date": "تاریخ خروج از شرکت",
             "avatar": 'تصویر آواتار',
+            "administrative_department": "بخش اداری",
+            "is_head_department": "سرپرست بخش",
+            "is_superuser": "دسترسی ادمین",
         }
         help_texts = {
             "leaving_date": "فقط درصورت نیاز پر شود"

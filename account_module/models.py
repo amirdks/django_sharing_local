@@ -56,6 +56,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     recruitment_date = models.DateField()
     leaving_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True, upload_to="images/avatar")
+    administrative_department = models.ForeignKey("AdministrativeDepartment", on_delete=models.SET_NULL, null=True)
+    is_head_department = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -115,3 +117,11 @@ class UserLoggedOut(models.Model):
 
     def __str__(self):
         return self.user.full_name
+
+
+class AdministrativeDepartment(models.Model):
+    title = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
