@@ -3,6 +3,8 @@ import datetime
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -25,8 +27,13 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError(_("the Email must be set"))
         email = self.normalize_email(email)
+        administrative_department = extra_fields.pop("administrative_department")
+        administrative_department_head = extra_fields.pop("administrative_department_head")
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.save()
+        user.administrative_department.set(administrative_department)
+        user.administrative_department_head.set(administrative_department_head)
         user.save()
         return user
 
@@ -56,8 +63,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     recruitment_date = models.DateField()
     leaving_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True, upload_to="images/avatar")
-    administrative_department = models.ForeignKey("AdministrativeDepartment", on_delete=models.SET_NULL, null=True)
-    is_head_department = models.BooleanField(default=False)
+    administrative_department = models.ManyToManyField("AdministrativeDepartment")
+    administrative_department_head = models.ManyToManyField("AdministrativeDepartmentHead", null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -69,6 +76,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_date = models.DateTimeField(auto_now=True)
 
     objects = UserManager()
+
+    class Meta:
+        verbose_name = 'کاربر'
+        verbose_name_plural = 'کاربران'
 
     def __str__(self):
         return self.email
@@ -107,6 +118,10 @@ class UserLoggedIn(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'گزارش ورود'
+        verbose_name_plural = 'گزارشات ورود'
+
     def __str__(self):
         return self.user.full_name
 
@@ -114,6 +129,10 @@ class UserLoggedIn(models.Model):
 class UserLoggedOut(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'گزارش خروح'
+        verbose_name_plural = 'گزارشات خروج'
 
     def __str__(self):
         return self.user.full_name
@@ -123,5 +142,27 @@ class AdministrativeDepartment(models.Model):
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'دپارتمان اداری'
+        verbose_name_plural = 'دپارتمان های اداری'
+
     def __str__(self):
         return self.title
+
+
+class AdministrativeDepartmentHead(models.Model):
+    administrative_department = models.OneToOneField("AdministrativeDepartment", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'سرپرست دپارتمان'
+        verbose_name_plural = 'سرپرست های دپارتمان'
+
+    def __str__(self):
+        return self.administrative_department.title
+
+
+@receiver(post_save, sender=AdministrativeDepartment)
+def create_administrative_department_head(sender, instance, created, **kwargs):
+    if created:
+        AdministrativeDepartmentHead.objects.create(administrative_department=instance)

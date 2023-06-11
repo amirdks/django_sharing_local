@@ -95,7 +95,7 @@
                                     <li><a href="{% url 'news_list_view' %}">اخبار</a></li>
                                 </ul>
                             </li>
-                            {% if request.user.is_superuser %}
+                            {% if request.user.is_superuser or user.administrative_department_head.exists %}
                                 <li><a><i class="fa-solid fa-users"></i> کارمندان <span
                                         class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu">

@@ -14,6 +14,8 @@ class File(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+        verbose_name_plural = 'قایل های ارسالی'
+        verbose_name = 'فایل ارسالی'
 
 
 class Event(models.Model):
@@ -22,6 +24,8 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["event_date"]
+        verbose_name_plural = 'رویداد ها'
+        verbose_name = 'رویداد'
 
     def get_reaming_days(self):
         res = self.event_date - timezone.now().date()
@@ -42,6 +46,8 @@ class Birthday(models.Model):
 
     class Meta:
         ordering = ["birthday_date"]
+        verbose_name_plural = 'تولد ها'
+        verbose_name = 'تولد'
 
     def reaming_date(self):
         return self.birthday_date - datetime.datetime.today().date()

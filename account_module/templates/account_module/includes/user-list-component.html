@@ -11,7 +11,7 @@
         <th scope="col">تاریخ آخرین ورود</th>
         <th scope="col">تاریخ استخدام</th>
         <th scope="col">تاریخ خروج از شرکت</th>
-        <th scope="col">رئیس بخش</th>
+        <th scope="col">سرپرست بخش های</th>
         <th scope="col">دسترسی ادمین</th>
         <th scope="col">رویداد ها</th>
     </tr>
@@ -23,7 +23,11 @@
             <td>{{ user.full_name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.national_code }}</td>
-            <td>{{ user.administrative_department | dont_show_none }}</td>
+            <td style="width: 10%">
+                {% for department in user.administrative_department.all %}
+                    {{ department.title | dont_show_none }},
+                {% endfor %}
+            </td>
             <td>{{ user.last_login | to_jalali }}</td>
             <td>{{ user.recruitment_date | show_jalali_date | change_month }}</td>
             <td>
@@ -33,12 +37,10 @@
                     <span style="color: #51c551">کارمند شرکت</span>
                 {% endif %}
             </td>
-            <td class="table-is-superuser">
-                {% if user.is_head_department %}
-                    <i class="fa-solid fa-circle-check"></i>
-                {% else %}
-                    <i class="fa-solid fa-circle-xmark"></i>
-                {% endif %}
+            <td style="width: 10%" class="table-is-superuser">
+                {% for department in user.administrative_department_head.all %}
+                    {{ department.administrative_department.title | dont_show_none }},
+                {% endfor %}
             </td>
             <td class="table-is-superuser">
                 {% if user.is_superuser %}
@@ -51,8 +53,10 @@
                 {% if not user.is_superuser %}
                     <a href="{% url 'user_edit_view' pk=user.id %}"
                        class="user-action-btn edit-user-btn">ویرایش</a>
+                    {% if request.user.is_superuser %}
                     <a onclick="deleteUser({{ user.id }})"
                        class="user-action-btn delete-user-btn">حذف</a>
+                    {% endif %}
                 {% endif %}
             </td>
         </tr>

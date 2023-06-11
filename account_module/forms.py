@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from account_module.models import User, AdministrativeDepartment
+from account_module.models import User, AdministrativeDepartment, AdministrativeDepartmentHead
 from account_module.validation import is_valid_iran_code
 
 
@@ -60,16 +60,17 @@ class UserCreateForm(forms.Form):
                'data-ha-datetimepicker': '#leaving_date'}),
         help_text='فقط درصورت نیاز پر شود', label="تاریخ خروج از شرکت", required=False)
 
-    administrative_department = forms.ModelChoiceField(
+    administrative_department = forms.ModelMultipleChoiceField(
         queryset=AdministrativeDepartment.objects.all(),
         label="بخش اداری",
         required=True,
-        widget=forms.Select(attrs={"class": "form-control"})
+        widget=forms.SelectMultiple(attrs={"class": "form-control", "multiple": "", "aria-label": "multiple select example"})
     )
 
-    is_head_department = forms.BooleanField(
+    administrative_department_head = forms.ModelMultipleChoiceField(
+        queryset=AdministrativeDepartmentHead.objects.all(),
         label='سرپرست بخش',
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        widget=forms.SelectMultiple(attrs={"class": "form-control", "multiple": "", "aria-label": "multiple select example"}),
         required=False
     )
 
@@ -101,7 +102,7 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["full_name", "national_code", "email", "password", "birthday_date", "recruitment_date",
-                  "leaving_date", "administrative_department", "is_head_department", "is_superuser", "avatar"]
+                  "leaving_date", "administrative_department", "administrative_department_head", "is_superuser", "avatar"]
         widgets = {
             "full_name": forms.TextInput(attrs={"class": "form-control", "placeholder": "نام و نام خانوادگی ..."}),
             "national_code": forms.TextInput(attrs={"class": "form-control", "placeholder": "کد ملی ..."}),
@@ -117,8 +118,8 @@ class UserEditForm(forms.ModelForm):
                 attrs={'class': 'form-control date-picker-input', 'id': 'leaving_date',
                        'data-ha-datetimepicker': '#leaving_date'}),
             "avatar": forms.ClearableFileInput(),
-            "administrative_department": forms.Select(attrs={"class": "form-control"}),
-            "is_head_department": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+            "administrative_department": forms.SelectMultiple(attrs={"class": "form-control", "multiple": "", "aria-label": "multiple select example"}),
+            "administrative_department_head": forms.SelectMultiple(attrs={"class": "form-control", "multiple": "", "aria-label": "multiple select example"}),
             "is_superuser": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
         labels = {
@@ -131,7 +132,7 @@ class UserEditForm(forms.ModelForm):
             "leaving_date": "تاریخ خروج از شرکت",
             "avatar": 'تصویر آواتار',
             "administrative_department": "بخش اداری",
-            "is_head_department": "سرپرست بخش",
+            "administrative_department_head": "سرپرست بخش",
             "is_superuser": "دسترسی ادمین",
         }
         help_texts = {

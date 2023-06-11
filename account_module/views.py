@@ -87,16 +87,25 @@ class LogoutView(LoginRequiredMixin, View):
 class UserListView(JustSuperUser, View):
     def get(self, request):
         context = {
-            'users': User.objects.all().exclude(id=request.user.id).order_by("-is_superuser")
+            'users': User.objects.all().exclude(id=request.user.id).order_by("-is_superuser"),
+            'departments': AdministrativeDepartment.objects.all(),
         }
         return render(request, 'account_module/user-list.html', context)
 
     def post(self, request):
         search_text = request.POST.get("search_text")
+        select_id = request.POST.get("select_id")
+        users = User.objects.filter(
+            Q(full_name__contains=search_text) | Q(national_code__contains=search_text) | Q(
+                email__contains=search_text)).exclude(id=request.user.id).order_by("-is_superuser")
+        if select_id and select_id != 0:
+            try:
+                administrative_department = AdministrativeDepartment.objects.filter(id=select_id)
+                users = users.filter(administrative_department__in=administrative_department)
+            except AdministrativeDepartment.DoesNotExist:
+                pass
         context = {
-            'users': User.objects.filter(
-                Q(full_name__contains=search_text) | Q(national_code__contains=search_text) | Q(
-                    email__contains=search_text)).exclude(id=request.user.id).order_by("-is_superuser")
+            'users': users,
         }
         user_list_component = render_to_string("account_module/includes/user-list-component.html", context,
                                                request=request)
@@ -106,6 +115,13 @@ class UserListView(JustSuperUser, View):
 class UserCreateView(JustSuperUser, View):
     def get(self, request):
         form = UserCreateForm()
+        if not request.user.is_superuser and request.user.administrative_department_head.exists():
+            form.fields.pop("administrative_department_head")
+            form.fields.pop("is_superuser")
+            form.fields["administrative_department"].queryset = form.fields[
+                "administrative_department"].queryset.filter(
+                administrativedepartmenthead__in=request.user.administrative_department_head.all())
+
         context = {
             "form": form,
         }
@@ -117,7 +133,6 @@ class UserCreateView(JustSuperUser, View):
             email = form.cleaned_data.pop("email")
             password = form.cleaned_data.pop("password")
             is_superuser = form.cleaned_data.get("is_superuser")
-            print(form.cleaned_data.get("national_code"))
             try:
                 if is_superuser:
                     new_user = User.objects.create_superuser(email, password, **form.cleaned_data)
@@ -151,6 +166,12 @@ class UserEditView(JustSuperUser, View):
     def get(self, request, pk):
         user: User = get_object_or_404(User, pk=pk, is_superuser=False)
         form = UserEditForm(instance=user)
+        if not request.user.is_superuser and request.user.administrative_department_head.exists():
+            form.fields.pop("administrative_department_head")
+            form.fields.pop("is_superuser")
+            form.fields["administrative_department"].queryset = form.fields[
+                "administrative_department"].queryset.filter(
+                administrativedepartmenthead__in=request.user.administrative_department_head.all())
         context = {
             "user": user,
             "form": form,

@@ -15,9 +15,20 @@
                         <div class="article-title">
                             <a href="{% url 'user_add_view' %}" class="add-newfile-btn">افزودن کاربر جدید</a>
                             <h1>لیست کاربران</h1>
-                            <div class="user-list-search-container">
-                                <input id="user-list-search-input" type="text" placeholder="جست و جو ...">
-                                <i class="fa-solid fa-magnifying-glass"></i>
+                            <div class="user-list-search">
+                                <div class="user-list-search-container">
+                                    <input id="user-list-search-input" type="text" placeholder="جست و جو ...">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </div>
+                                <div class="user-list-category-container">
+                                    <select style="width: auto!important;" class="form-control"
+                                            id="exampleFormControlSelect1">
+                                        <option id="0" selected>بخش مورد نظر ...</option>
+                                        {% for department in departments %}
+                                            <option value="{{ department.id }}">{{ department.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div id="user-list-table-container">
@@ -71,6 +82,8 @@
         searchInput.addEventListener("input", event => {
             let formData = new FormData(httpForm)
             formData.append("search_text", event.target.value)
+            let selectInput = document.getElementById("exampleFormControlSelect1")
+            formData.append("select_id", selectInput.value)
             $.ajax({
                 url: httpForm.getAttribute("action"),
                 type: httpForm.getAttribute("method"),
@@ -87,6 +100,32 @@
                     }
                 }
             })
+        })
+        let selectInput = document.getElementById("exampleFormControlSelect1")
+        selectInput.addEventListener("change", (event) => {
+            let selectValue = event.target.value
+            if (selectValue != 0) {
+                let formData = new FormData(httpForm)
+                let searchInput2 = document.getElementById("user-list-search-input")
+                formData.append("search_text", searchInput2.value)
+                formData.append("select_id", event.target.value)
+                $.ajax({
+                    url: httpForm.getAttribute("action"),
+                    type: httpForm.getAttribute("method"),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success(res) {
+                        if (res.status === "success") {
+                            $('#user-list-table-container').fadeOut(500, function () {
+                                $('#user-list-table-container').html(res.message).fadeIn(500)
+                            })
+                        } else {
+                            showNotification(res, "شکست")
+                        }
+                    }
+                })
+            }
         })
     </script>
 {% endblock %}

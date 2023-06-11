@@ -2,7 +2,7 @@ import re
 
 from django import forms
 
-from account_module.models import AdministrativeDepartment
+from account_module.models import AdministrativeDepartment, AdministrativeDepartmentHead
 from contact_module.models import UnusualContactReason
 
 
@@ -26,7 +26,7 @@ class ContactForm(forms.Form):
         label="دلیل تماس غیر متعارف"
     )
     head_administrative_department = forms.ModelChoiceField(
-        queryset=AdministrativeDepartment.objects.all(),
+        queryset=AdministrativeDepartmentHead.objects.all(),
         required=False,
         widget=forms.Select(attrs={"class": "form-control"}),
         label="ارسال به سرپرست",

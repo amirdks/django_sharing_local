@@ -11,7 +11,7 @@ from dateutil import tz
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files import File
 from django.core.files.base import ContentFile
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -27,8 +27,10 @@ from utils.form_errors import form_error
 # Create your views here.
 class ContactCreateView(LoginRequiredMixin, View):
     def get(self, request):
+        form = ContactForm()
+        form.fields["head_administrative_department"].queryset = form.fields["head_administrative_department"].queryset.filter(administrative_department__in=request.user.administrative_department.all())
         context = {
-            "form": ContactForm()
+            "form": form,
         }
         return render(request, 'contact_module/contact-form.html', context)
 
@@ -38,9 +40,11 @@ class ContactCreateView(LoginRequiredMixin, View):
             phone_number = form.cleaned_data.get("phone_number")
             unusual_contact_reason = form.cleaned_data.get("unusual_contact_reason")
             description = form.cleaned_data.get("description")
+            head_administrative_department = form.cleaned_data.get("head_administrative_department")
             new_contact = Contact.objects.create(sender_id=request.user.id, phone_number=phone_number,
                                                  unusual_contact_reason_id=unusual_contact_reason.id,
-                                                 description=description)
+                                                 description=description,
+                                                 head_administrative_department=head_administrative_department)
             data = {}
             # tehran_tz = pytz.timezone('Asia/Tehran')
             now_date = timezone.now()
@@ -87,10 +91,16 @@ class ContactCreateView(LoginRequiredMixin, View):
 
 
 class ContactListView(JustSuperUser, View):
-    def get(self, request):
+    def get(self, request: HttpRequest):
+        contacts = Contact.objects.all()
+        reports = ContactReport.objects.all()
+        if not request.user.is_superuser and request.user.administrative_department_head.exists():
+            contacts = contacts.filter(
+                head_administrative_department__in=request.user.administrative_department_head.all())
+            reports = reports
         context = {
-            'contacts': Contact.objects.all(),
-            'reports': ContactReport.objects.all(),
+            'contacts': contacts,
+            'reports': reports,
         }
         return render(request, 'contact_module/contact-list.html', context)
 

@@ -29,7 +29,8 @@
                                     <div class="birthday-date">
                                         {{ contact.created_at|show_jalali_date|change_month }}
                                     </div>
-                                    <button onclick="showContactMessage('{{ contact.description }}')" type="button"
+                                    <button onclick="showContactMessage('{{ contact.description }}', '{{ contact.head_administrative_department.administrative_department.title }}')"
+                                            type="button"
                                             data-toggle="modal"
                                             data-target="#exampleModalCenter"
                                             class="contact-show-btn">
@@ -87,10 +88,20 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="contact-modal-title">
 
+                    </div>
+                    <div class="contact-user-info-container">
+                        <div class="contact-user-department">
+                            <span>بخش اداری کاربر :</span> <span class="contact-user-department-content"></span>
+                        </div>
+                        <div class="contact-user-department-contact">
+                            <span>بخش اداری تماس :</span> <span class="contact-user-department-contact-content"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">بستن</button>
                 </div>
             </div>
         </div>
@@ -98,9 +109,13 @@
 {% endblock %}
 {% block custom_script %}
     <script>
-        function showContactMessage(text) {
-            let modalBody = document.querySelector(".modal-body")
-            modalBody.innerText = text;
+        function showContactMessage(text, head_administrative_department) {
+            let modalHead = document.querySelector(".contact-user-department-content")
+            let modalHead2 = document.querySelector(".contact-user-department-contact-content")
+            let modalTitle = document.querySelector(".contact-modal-title")
+            modalHead.innerText = head_administrative_department;
+            modalHead2.innerText = head_administrative_department;
+            modalTitle.innerText = text;
         }
     </script>
 {% endblock %}
