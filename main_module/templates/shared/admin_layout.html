@@ -110,9 +110,9 @@
                             <li><a><i class="fa-solid fa-image"></i> گالری تصاویر <span
                                     class="fa fa-chevron-down"></span></a>
                                 <ul class="nav child_menu">
-                                    <li><a href="{% url 'user_list_view' %}">دسته بندی گالری</a></li>
+                                    <li><a href="{% url 'gallery_category_list_view' %}">دسته بندی گالری</a></li>
                                     {% if request.user.is_superuser %}
-                                        <li><a href="{% url 'user_list_view' %}">افزودن دسته بندی گالری</a></li>
+                                        <li><a href="{% url 'gallery_category_add' %}">افزودن دسته بندی گالری</a></li>
                                     {% endif %}
                                 </ul>
                             </li>
