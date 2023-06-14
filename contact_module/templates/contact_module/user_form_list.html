@@ -1,0 +1,63 @@
+{% extends 'shared/admin_layout.html' %}
+{% block content %}
+    <div class="">
+        <div class="clearfix"></div>
+        <div class="main-row-container row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_content">
+                    <br/>
+                    <div class="article-container">
+                        <div class="article-title">
+                            {#                            {% if request.user.is_superuser %}#}
+                            {#                                <a href="{% url 'contact_form_create_view' %}" class="add-newfile-btn">افزودن فایل#}
+                            {#                                    جدید</a>#}
+                            {#                            {% endif %}#}
+                            <h1>لیست فرم ها</h1>
+                            {#                            {% if  request.user.is_superuser %}#}
+                            {#                                <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>#}
+                            {#                            {% endif %}#}
+                        </div>
+                        {% if forms.exists %}
+                            <div id="user-list-table-container">
+                                <table class="table report-table">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">نام فرم</th>
+                                        <th scope="col">دلیل تماس نامتعارف</th>
+                                        <th scope="col">رویداد ها</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for form in forms %}
+                                        <tr>
+                                            <th scope="row">{{ forloop.counter }}</th>
+                                            <td>{{ form.title }}</td>
+                                            <td>
+                                                {% for reason in form.unusual_contact_reason.all %}
+                                                    {{ reason.title }},
+                                                {% endfor %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'contact_view' form_id=form.pk %}"
+                                                   class="user-action-btn edit-user-btn">پر کردن فرم</a>
+                                                {#                                            {% if request.user.is_superuser %}#}
+                                                {#                                            <a href="{% url 'contact_form_delete_view' pk=form.id %}"#}
+                                                {#                                               class="user-action-btn delete-user-btn">حذف</a>#}
+                                                {#                                            {% endif %}#}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <h1 style="width:80%;margin: 20px auto; text-align: center; background-color: #d84c4c; color: white; padding: 15px 0; border-radius: 15px">
+                                هیچ فرمی برای شما قرار داده نشده</h1>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

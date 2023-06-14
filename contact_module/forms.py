@@ -3,7 +3,7 @@ import re
 from django import forms
 
 from account_module.models import AdministrativeDepartment, AdministrativeDepartmentHead
-from contact_module.models import UnusualContactReason
+from contact_module.models import UnusualContactReason, ContactFormModel
 
 
 def validate_mobile(value):
@@ -43,3 +43,14 @@ class ContactForm(forms.Form):
         if not validate:
             raise forms.ValidationError("شماره تلفن وارد شده معتبر نمیباشد")
         return phone_number
+
+
+class ContactFormModelForm(forms.ModelForm):
+    class Meta:
+        model = ContactFormModel
+        fields = ["title", "unusual_contact_reason", "users"]
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control"}),
+            "unusual_contact_reason": forms.SelectMultiple(attrs={"class": "form-control", "multiple": "", "aria-label": "multiple select example"}),
+            "users": forms.SelectMultiple(attrs={"class": "form-control", "multiple": "", "aria-label": "multiple select example"}),
+        }

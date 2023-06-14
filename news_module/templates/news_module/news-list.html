@@ -31,8 +31,14 @@
                                         {{ new.author.full_name }} <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div class="birthday-date">
-                                        {{ new.created_at.date | show_jalali_date | change_month }} - {{ new.created_at.time | time:"H:i" }}
+                                        {{ new.created_at.date | show_jalali_date | change_month }}
+                                        - {{ new.created_at.time | time:"H:i" }}
                                     </div>
+{#                                    {% if request.user.is_superuser %}#}
+{#                                        <a href="{% url 'user_list_view' %}" class="event-delete-icon">#}
+{#                                            حذف کردن#}
+{#                                        </a>#}
+{#                                    {% endif %}#}
                                     {#                    <a href="{% url 'news_delete_view' pk=new.id %}" class="event-delete-icon">#}
                                     {#                    حذف کردن#}
                                     {#                </a>#}

@@ -77,6 +77,8 @@
     transition: all .3s;
     border-radius: 10px;
     position: relative !important;
+    /*position: relative;*/
+    display: block;
 }
 
 .birthday:hover {
@@ -364,7 +366,10 @@
     background-color: #686cba;
     color: white !important;
 }
-
+.edit-user-btn2 {
+    background-color: #58c358!important;
+    color: white !important;
+}
 .user-action-btn:hover {
     text-decoration: underline;
 }

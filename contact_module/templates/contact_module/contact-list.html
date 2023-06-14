@@ -45,7 +45,8 @@
                     </div>
                     <div class="article-container">
                         <div class="article-title">
-                            <a href="{% url 'add_new_contact_report' %}" class="add-newfile-btn">گرفتن گزارش امروز</a>
+                            <a href="{% url 'add_new_contact_report' form_id=current_form.id %}"
+                               class="add-newfile-btn">گرفتن گزارش امروز</a>
                             <h1>گزارشات ارتباط ها</h1>
                             <a href="{% url 'home_view' %}" class="go-to-home-page-btn">رفتن به صفحه اصلی</a>
                         </div>

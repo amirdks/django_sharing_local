@@ -22,6 +22,7 @@ class Contact(models.Model):
     unusual_contact_reason = models.ForeignKey('UnusualContactReason', on_delete=models.CASCADE)
     head_administrative_department = models.ForeignKey("account_module.AdministrativeDepartmentHead",
                                                        on_delete=models.SET_NULL, null=True, blank=True)
+    form = models.ForeignKey("ContactFormModel", on_delete=models.CASCADE)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
 
@@ -41,3 +42,16 @@ class ContactReport(models.Model):
     class Meta:
         verbose_name = 'گزارش ارتباط'
         verbose_name_plural = 'گزارشات ارتباط'
+
+
+class ContactFormModel(models.Model):
+    users = models.ManyToManyField("account_module.User")
+    unusual_contact_reason = models.ManyToManyField("UnusualContactReason")
+    title = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = 'فرم'
+        verbose_name_plural = 'لیست فرم ها'
+
+    def __str__(self):
+        return self.title

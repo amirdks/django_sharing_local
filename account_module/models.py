@@ -82,7 +82,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'کاربران'
 
     def __str__(self):
-        return self.email
+        return f"{self.email} ==> {self.full_name}"
 
     @property
     def get_reaming_days(self):

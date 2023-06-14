@@ -9,33 +9,29 @@
                     <br/>
                     <div class="article-container">
                         <div class="article-title">
-                            <h1>فرم ارتباط به اپراتور({{ current_form.title }})</h1>
+                            <h1>اضافه کردن فرم ارتباط با اپراتور</h1>
                         </div>
-                        <form class="file-add-form" method="post" action="{% url 'contact_view' form_id=current_form.pk %}">
+                        <form class="file-add-form" method="post" action="{% url 'contact_form_create_view' %}">
                             {% csrf_token %}
                             <div class="file-add-input-group">
-                                <label for="">نام کارمند :</label>
-                                <p style="width: 30%; font-size: 1.2rem">{{ request.user.full_name }}</p>
+                                <label for=""> عنوان فرم : </label>
+                                {{ form.title }}
                             </div>
                             <div class="file-add-input-group">
-                                <label for=""> شماره تلفن همراه : </label>
-                                {{ form.phone_number }}
-                            </div>
-                            <div class="file-add-input-group">
-                                <label for=""> دلیل تماس غیرمتعارف : </label>
+                                <label for=""> لیست تماس های غیر متعارف : </label>
                                 {{ form.unusual_contact_reason }}
                             </div>
                             <div style="flex-wrap: wrap" class="file-add-input-group">
-                                <label for=""> ارسال به سرپرست بخش : </label>
-                                {{ form.head_administrative_department }}
-                                <span class="input-help-text">
-                                    {{ form.head_administrative_department.help_text }}
-                               </span>
+                                <label for=""> لیست کاربران مجاز : </label>
+                                {{ form.users }}
+{#                                <span class="input-help-text">#}
+{#                                    {{ form.head_administrative_department.help_text }}#}
+{#                               </span>#}
                             </div>
-                            <div class="file-add-input-group">
-                                <label for=""> متن پیام : </label>
-                                {{ form.description }}
-                            </div>
+{#                            <div class="file-add-input-group">#}
+{#                                <label for=""> متن پیام : </label>#}
+{#                                {{ form.description }}#}
+{#                            </div>#}
                             <button type="submit">تایید</button>
                         </form>
                         {% if form.errors %}
