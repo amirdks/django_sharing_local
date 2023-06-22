@@ -27,13 +27,19 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError(_("the Email must be set"))
         email = self.normalize_email(email)
-        administrative_department = extra_fields.pop("administrative_department")
-        administrative_department_head = extra_fields.pop("administrative_department_head")
+        administrative_department = None
+        administrative_department_head = None
+        if extra_fields.get("administrative_department"):
+            administrative_department = extra_fields.pop("administrative_department")
+        if extra_fields.get("administrative_department_head"):
+            administrative_department_head = extra_fields.pop("administrative_department_head")
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
-        user.administrative_department.set(administrative_department)
-        user.administrative_department_head.set(administrative_department_head)
+        if administrative_department:
+            user.administrative_department.set(administrative_department)
+        if administrative_department_head:
+            user.administrative_department_head.set(administrative_department_head)
         user.save()
         return user
 
@@ -60,17 +66,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     national_code = models.CharField(max_length=10, unique=True, validators=[is_valid_iran_code])
     birthday_date = models.DateField(null=True, blank=True)
-    recruitment_date = models.DateField()
+    recruitment_date = models.DateField(null=True, blank=True)
     leaving_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True, upload_to="images/avatar")
-    administrative_department = models.ManyToManyField("AdministrativeDepartment")
+    administrative_department = models.ManyToManyField("AdministrativeDepartment", null=True, blank=True)
     administrative_department_head = models.ManyToManyField("AdministrativeDepartmentHead", null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = "email"
-    # REQUIRED_FIELDS = ["full_name", "national_code", "email"]
+    REQUIRED_FIELDS = ["full_name", "national_code"]
 
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)

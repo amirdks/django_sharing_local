@@ -89,6 +89,7 @@
             for (const input of inputListElements) {
                 data.option_list.push(input.value);
             }
+            let currentUrl = location.protocol + '//' + location.host;
             data["option_list"] = JSON.stringify(data.option_list);
             console.log(data)
             $.ajax({
@@ -102,8 +103,7 @@
                 success: function (res) {
                     if (res.status === "success") {
                         res["callBack"] = () => {
-                            // TODO :replace this
-                            location.replace("http://127.0.0.1:8000/polls/")
+                            location.replace(`${currentUrl}/polls/`)
                         }
                         showNotification(res, "موفق")
                     } else if (res.status === "error") {

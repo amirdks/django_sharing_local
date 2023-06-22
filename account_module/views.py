@@ -16,7 +16,6 @@ from account_module.models import *
 # Create your views here.
 class LoginView(View):
     def get(self, request: HttpRequest):
-        # TODO : add redirect to home view
         if request.user.is_authenticated:
             return redirect(reverse("home_view"))
         form = LoginForm()
@@ -26,9 +25,8 @@ class LoginView(View):
         return render(request, "account_module/login.html", context)
 
     def post(self, request):
-        # TODO : add redirect to home view
         if request.user.is_authenticated:
-            pass
+            return redirect(reverse("home_view"))
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             email = login_form.cleaned_data.get('email')
@@ -49,7 +47,6 @@ class LoginView(View):
 
 class RegisterView(View):
     def get(self, request):
-        # TODO : add redirect to home view
         if request.user.is_authenticated:
             return redirect(reverse("home_view"))
         form = RegisterForm()
@@ -59,9 +56,8 @@ class RegisterView(View):
         return render(request, "account_module/register.html", context)
 
     def post(self, request):
-        # TODO : add redirect to home view
         if request.user.is_authenticated:
-            pass
+            return redirect(reverse("home_view"))
         form = RegisterForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data.get("email")
